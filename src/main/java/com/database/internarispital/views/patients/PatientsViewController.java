@@ -66,6 +66,9 @@ public class PatientsViewController implements Initializable
     
 	@FXML
 	private Button doctorsViewButton;
+	
+	@FXML
+	private Button adminViewButton;
 		
     @FXML
     private Button insertButton;
@@ -87,6 +90,7 @@ public class PatientsViewController implements Initializable
     private Window mWindow;
     private IPatientsViewModel mPatientsViewModel; 
     private Callback<Void, Void> mShowDoctorsViewCb;
+    private Callback<Void, Void> mShowAdminViewCb;
   
     @Override
 	public void initialize(URL location, ResourceBundle resources) 
@@ -102,6 +106,7 @@ public class PatientsViewController implements Initializable
     		});
     		*/
     	doctorsViewButton.setOnAction(event->onShowDoctorsView());
+    	adminViewButton.setOnAction(event->onShowAdminView());
     	birthDatePicker.setValue(LocalDate.now());
     	sectionsList.setOnAction(event->onSectionSelected());
     	wardsList.setOnAction(event->onWardSelected());
@@ -118,11 +123,22 @@ public class PatientsViewController implements Initializable
     {
     	mShowDoctorsViewCb = showDoctorsView;
     }
+    public void setOnShowAdminView(Callback<Void, Void> showAdminView)
+    {
+    	mShowAdminViewCb = showAdminView;
+    }
     private void onShowDoctorsView()
     {
     	if(mShowDoctorsViewCb != null)
     	{
     		mShowDoctorsViewCb.call(null);
+    	}
+    }
+    private void onShowAdminView()
+    {
+    	if(mShowAdminViewCb != null)
+    	{
+    		mShowAdminViewCb.call(null);
     	}
     }
     private void configurePatientsTable()

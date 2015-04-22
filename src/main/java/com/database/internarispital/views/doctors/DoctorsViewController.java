@@ -96,9 +96,9 @@ public class DoctorsViewController implements Initializable
 				}
     		}
     	});
-		patientsViewButton.setOnAction(event->onShowPatientsView());
-		diagCategoryList.setOnAction(event->onDiagCategorySelected());
-		diagnosticateButton.setOnAction(event->onDiagnosticate());
+		patientsViewButton.setOnAction(event -> onShowPatientsView());
+		diagCategoryList.setOnAction(event -> onDiagCategorySelected());
+		diagnosticateButton.setOnAction(event -> onDiagnosticate());
 		
 		diagDatePicker.setValue(LocalDate.now());
 		diagDatePicker.setOnAction(event->

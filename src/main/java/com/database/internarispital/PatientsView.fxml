@@ -1,9 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.scene.text.*?>
-<?import javafx.scene.layout.*?>
 <?import java.lang.*?>
 <?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
 
 <Pane fx:id="root" prefHeight="626.0" prefWidth="760.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.database.internarispital.views.patients.PatientsViewController">
    <children>
@@ -34,6 +33,7 @@
       <ComboBox fx:id="bedsList" layoutX="571.0" layoutY="384.0" prefHeight="25.0" prefWidth="162.0" promptText="Select bed" />
       <ComboBox fx:id="sectionsList" layoutX="571.0" layoutY="309.0" prefHeight="25.0" prefWidth="162.0" promptText="Select section" />
       <Button fx:id="dischargeButton" layoutX="533.0" layoutY="484.0" mnemonicParsing="false" text="Discharge" />
-      <Button fx:id="doctorsViewButton" layoutX="652.0" layoutY="14.0" mnemonicParsing="false" text="Doctors' View" />
+      <Button fx:id="doctorsViewButton" layoutX="493.0" layoutY="14.0" mnemonicParsing="false" text="Doctors' View" />
+      <Button fx:id="adminViewButton" layoutX="610.0" layoutY="14.0" mnemonicParsing="false" prefHeight="17.0" prefWidth="136.0" text="Administration View" />
    </children>
 </Pane>

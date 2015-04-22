@@ -1,0 +1,13 @@
+InternariSpital
+TO DO:
+HOSPITALIZE PATIENT
+-update available beds after new hospitalization
+-distinguish between wards that have free beds and those that are fully occupied
+-not being able to add an already admitted patient
+DISCHARGE PATIENT
+
+CONSULTATION (Doctor's View)
+-constraint on consultation date
+-prevent the user from opening multiple instances of the Medical Record view for the same patient.
+
+ADMINISTRATION

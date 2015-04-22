@@ -15,12 +15,16 @@ public class PatientsViewModel implements IPatientsViewModel
 	private PatientsViewController mPatientsViewController;
 	private DataBase mDataBase;
 	private Callback<Void,Void> mShowDoctorsView;
+	private Callback<Void,Void> mShowAdminView;
 	
-	public PatientsViewModel(PatientsViewController patientsViewController, DataBase dataBase, Callback<Void,Void> showDoctorsView)
+	public PatientsViewModel(PatientsViewController patientsViewController, DataBase dataBase
+			, Callback<Void,Void> showDoctorsView
+			, Callback<Void,Void> showAdminView)
 	{
 		mPatientsViewController = patientsViewController;
 		mDataBase = dataBase;
 		mShowDoctorsView = showDoctorsView;
+		mShowAdminView = showAdminView;
 		if(mPatientsViewController != null)
 		{
 			configController();
@@ -33,17 +37,8 @@ public class PatientsViewModel implements IPatientsViewModel
 		mPatientsViewController.setViewModel(this);
 		mPatientsViewController.setPatients(mDataBase.getHospitalizedPatients());
 		mPatientsViewController.setSection(mDataBase.getSections());
-	/*	mmPatientsViewController.setOnAddPatient(new Callback <Patient, Void> ()
-				{
-					public Void call(Patient patient)
-					{
-						mDataBase.insertNewPatient(patient);
-						mmPatientsViewController.setPatients(mDataBase.getPatients());
-						return null;
-					}
-				});
-	*/
 		mPatientsViewController.setOnShowDoctorsView(mShowDoctorsView);
+		mPatientsViewController.setOnShowAdminView(mShowAdminView);
 	}
 	public void selectSection(Section section)
 	{

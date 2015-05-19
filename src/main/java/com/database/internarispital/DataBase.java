@@ -1,6 +1,5 @@
 package com.database.internarispital;
 
-import java.security.PrivilegedActionException;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -16,15 +15,15 @@ import com.database.internarispital.entities.Bed;
 import com.database.internarispital.entities.Consultation;
 import com.database.internarispital.entities.DiagCategory;
 import com.database.internarispital.entities.Diagnostic;
-import com.database.internarispital.entities.Doctor;
 import com.database.internarispital.entities.HospitalizationPeriod;
 import com.database.internarispital.entities.Section;
 import com.database.internarispital.entities.Ward;
+import com.database.internarispital.entities.doctors.Doctor;
+import com.database.internarispital.entities.doctors.DoctorData;
 import com.database.internarispital.entities.patients.HospitalizedPatient;
 import com.database.internarispital.entities.patients.Patient;
 import com.database.internarispital.entities.patients.PatientData;
 import com.microsoft.sqlserver.jdbc.SQLServerDataSource;
-import com.sun.corba.se.spi.orbutil.fsm.State;
 
 public class DataBase 
 {
@@ -38,8 +37,10 @@ public class DataBase
 	private SQLServerDataSource mDataSource;
 	private Connection mConnection;
 	private Statement mStatement; 
+	private PreparedStatement mInsertDoctorStatement;
 	private PreparedStatement mInsertPatientStatement;
 	private PreparedStatement mInsertConsultationStatement;
+	
 	public DataBase() throws SQLException
 	{
 		initializeDataSource();
@@ -62,6 +63,7 @@ public class DataBase
 		{
 			mConnection = mDataSource.getConnection();
     		mStatement = mConnection.createStatement();
+    		initInsertDoctorStatement();
     		initInsertPatientStatement();
     		initInsertConsultationStatement();
 		}
@@ -72,6 +74,12 @@ public class DataBase
 		}
 	}
 	
+	
+	private void initInsertDoctorStatement() throws SQLException
+	{
+		String sqlQuery = "INSERT INTO Doctors VALUES (?, ?, ?, ?)";
+		mInsertDoctorStatement = mConnection.prepareStatement(sqlQuery, Statement.RETURN_GENERATED_KEYS);
+	}
 	private void initInsertPatientStatement() throws SQLException
 	{
 		String sqlQuery = "INSERT INTO Patients VALUES (?, ?, ?)";
@@ -86,7 +94,10 @@ public class DataBase
 	@Override
 	public void finalize()
 	{
+		//TODO We should keep all of these statements in 
+		// a list to ensure that all of them properly closed.
 		closeStatement(mStatement);
+		closeStatement(mInsertDoctorStatement);
 		closeStatement(mInsertPatientStatement);
 		closeStatement(mInsertConsultationStatement);
 		closeConnection();	
@@ -122,6 +133,35 @@ public class DataBase
     	{
     		e.printStackTrace();
     	}
+	}
+	
+	public Doctor insertDoctor(DoctorData doctorData)
+	{
+		Doctor doctor = null;
+		try 
+		{
+			mInsertDoctorStatement.setString(1, doctorData.doctorNameProperty().getValue());
+			mInsertDoctorStatement.setString(2, doctorData.doctorSurnameProperty().getValue());
+			mInsertDoctorStatement.setString(3, doctorData.gradeProperty().getValue());
+			mInsertDoctorStatement.setString(4, doctorData.specialityProperty().getValue());
+
+			int rowsModified = mInsertDoctorStatement.executeUpdate();
+			int doctorId = -1;
+			if (rowsModified == 1)
+			{
+				ResultSet generatedKeys = mInsertDoctorStatement.getGeneratedKeys();
+				if(generatedKeys.next())
+				{
+					doctorId = generatedKeys.getInt(1);
+					doctor = new Doctor(doctorId, doctorData);
+				}
+			}
+		} 
+		catch (SQLException e) 
+		{
+			e.printStackTrace();
+		}
+		return doctor;
 	}
 	
 	public ObservableList<HospitalizedPatient> getHospitalizedPatients()
@@ -383,8 +423,9 @@ public class DataBase
 		int doctorId = resultSet.getInt("doctor_Id");
 		String doctorName = resultSet.getString("doctor_name");
 		String doctorSurname = resultSet.getString("doctor_surname");
-		String speciality = resultSet.getString("speciality");
-		return new Doctor(doctorId, doctorName, doctorSurname, speciality);
+		String grade = resultSet.getString("doctor_grade");
+		String speciality = resultSet.getString("speciality_name");
+		return new Doctor(doctorId, new DoctorData(doctorName, doctorSurname, grade, speciality));
 	}
 	public ObservableList<Section> getSections()
 	{

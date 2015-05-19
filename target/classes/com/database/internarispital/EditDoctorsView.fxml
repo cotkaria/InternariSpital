@@ -1,10 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import java.lang.*?>
 <?import javafx.scene.*?>
 <?import javafx.scene.control.*?>
-<?import java.lang.*?>
 <?import javafx.scene.layout.*?>
-
 
 <Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="592.0" prefWidth="908.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.database.internarispital.views.editDoctors.EditDoctorsViewController">
    <children>
@@ -13,8 +12,10 @@
             <Button fx:id="removeButton" layoutX="116.0" layoutY="536.0" mnemonicParsing="false" text="Remove" />
             <TableView fx:id="doctorsTable" layoutX="116.0" layoutY="100.0" prefHeight="422.0" prefWidth="382.0">
               <columns>
-                <TableColumn prefWidth="75.0" text="C1" />
-                <TableColumn prefWidth="100.0" text="C2" />
+                <TableColumn fx:id="nameColumn" prefWidth="75.0" text="Name" />
+                <TableColumn fx:id="surnameColumn" prefWidth="100.0" text="Surname" />
+                  <TableColumn fx:id="gradeColumn" prefWidth="100.0" text="Grade" />
+                  <TableColumn fx:id="specialityColumn" prefWidth="100.0" text="Speciality" />
               </columns>
                <columnResizePolicy>
                   <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
@@ -26,15 +27,13 @@
          <children>
             <Label layoutX="566.0" layoutY="109.0" text="Name" />
             <Label layoutX="566.0" layoutY="187.0" text="Speciality" />
-            <Label layoutX="565.0" layoutY="275.0" text="Birth date" />
             <Label layoutX="566.0" layoutY="150.0" text="Surname" />
-            <TextField fx:id="surnameTF" layoutX="699.0" layoutY="151.0" prefHeight="25.0" prefWidth="174.0" promptText="Provide a Surname" />
+            <TextField fx:id="doctorSurnameTF" layoutX="699.0" layoutY="151.0" prefHeight="25.0" prefWidth="174.0" promptText="Provide a Surname" />
             <Label layoutX="565.0" layoutY="231.0" text="Medical Grade" />
-            <DatePicker layoutX="699.0" layoutY="271.0" />
-            <TextField fx:id="nameTF" layoutX="699.0" layoutY="110.0" prefHeight="25.0" prefWidth="174.0" promptText="Provide a Name" />
+            <TextField fx:id="doctorNameTF" layoutX="699.0" layoutY="110.0" prefHeight="25.0" prefWidth="174.0" promptText="Provide a Name" />
             <ComboBox fx:id="specialtyCB" layoutX="699.0" layoutY="188.0" prefHeight="25.0" prefWidth="174.0" promptText="Select Speciality" />
-            <ComboBox layoutX="699.0" layoutY="227.0" prefHeight="25.0" prefWidth="174.0" promptText="Select Grade" />
-            <Button fx:id="addButton" layoutX="699.0" layoutY="324.0" mnemonicParsing="false" text="Add" />
+            <ComboBox fx:id="gradeCB" layoutX="699.0" layoutY="227.0" prefHeight="25.0" prefWidth="174.0" promptText="Select Grade" />
+            <Button fx:id="addDoctorBT" layoutX="699.0" layoutY="324.0" mnemonicParsing="false" text="Add" />
          </children>
       </Group>
       <Button fx:id="exitButton" layoutX="821.0" layoutY="26.0" mnemonicParsing="false" text="Exit" />

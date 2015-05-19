@@ -11,7 +11,7 @@ import org.controlsfx.dialog.Dialogs;
 import com.database.internarispital.entities.Consultation;
 import com.database.internarispital.entities.DiagCategory;
 import com.database.internarispital.entities.Diagnostic;
-import com.database.internarispital.entities.Doctor;
+import com.database.internarispital.entities.doctors.Doctor;
 import com.database.internarispital.entities.patients.HospitalizedPatient;
 import com.database.internarispital.entities.patients.Patient;
 import com.database.internarispital.views.exception.MissingSelectionException;
@@ -232,10 +232,14 @@ public class DoctorsViewController implements Initializable
     	HospitalizedPatient patient = null;
     	SelectionModel<Consultation> selectionModel = consultationTable.getSelectionModel();
     	if(!selectionModel.isEmpty())
-    	{
-    		patient = selectionModel.getSelectedItem().getPatient();
-    	}
-    	else 
+    	{	//focus on the table is lost so we should check if there is really a patient selected 
+    		Consultation consultation = selectionModel.getSelectedItem();
+    		if(consultation != null)
+    		{
+    			patient = consultation.getPatient();
+    		}
+    	}    	
+    	if(patient == null)
     	{
     		throw new MissingSelectionException("Please select a patient from the table");
     	}

@@ -1,6 +1,7 @@
 package com.database.internarispital.entities;
 
 
+import com.database.internarispital.entities.doctors.Doctor;
 import com.database.internarispital.entities.patients.HospitalizedPatient;
 
 import javafx.beans.property.SimpleStringProperty;
@@ -18,6 +19,7 @@ public class Consultation
 	{
 		this(-1, patient, new Doctor(), new Diagnostic(), "");
 	}
+	
 	public Consultation(int consultationId, HospitalizedPatient patient, Doctor doctor, Diagnostic diagnostic, String consultationDate)
 	{
 		mConsultationDate = new SimpleStringProperty(consultationDate);

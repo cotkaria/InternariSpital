@@ -273,6 +273,7 @@ public class PatientsViewController implements Initializable
    {
 	   bedsList.setItems(beds);
    }
+   
 	private void showErrorPopUp(String message)
 	{
 		Dialogs.create().owner(mWindow).title("Error").message(message).showError();

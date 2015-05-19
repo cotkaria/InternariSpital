@@ -3,6 +3,8 @@ package com.database.internarispital.views.editDoctors;
 import javafx.util.Callback;
 
 import com.database.internarispital.DataBase;
+import com.database.internarispital.entities.doctors.Doctor;
+import com.database.internarispital.entities.doctors.DoctorData;
 
 public class EditDoctorsViewModel implements IEditDoctorsViewModel
 {
@@ -26,5 +28,13 @@ public class EditDoctorsViewModel implements IEditDoctorsViewModel
 	{
 		mViewController.setViewModel(this);
 		mViewController.setOnExit(mReturnCallback);
+		mViewController.setDoctors(mDataBase.getDoctors());
+	}
+	
+	public void addDoctor(DoctorData data)
+	{
+		Doctor doctor = mDataBase.insertDoctor(data);
+		mViewController.addDoctor(doctor);
+		//TODO add to the list of doctors of the ViewController
 	}
 }

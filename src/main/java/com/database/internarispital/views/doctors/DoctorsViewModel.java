@@ -14,11 +14,11 @@ public class DoctorsViewModel implements IDoctorsViewModel
 	private DoctorsViewController mDoctorsViewController;
 	private DataBase mDataBase;
 	private Callback<Void, Void> mShowPatientsView;
-	private Callback<Patient, Void> mShowPatientsRecord;
+	private Callback<HospitalizedPatient, Void> mShowPatientsRecord;
 	
 	public DoctorsViewModel(DoctorsViewController doctorsViewController, DataBase dataBase, 
 			Callback<Void, Void> showPatientsView,
-			Callback<Patient, Void> showPatientsRecord)
+			Callback<HospitalizedPatient, Void> showPatientsRecord)
 	{
 		mDoctorsViewController = doctorsViewController;
 		mDataBase = dataBase;

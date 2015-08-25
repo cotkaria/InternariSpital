@@ -1,15 +1,20 @@
 package com.database.internarispital.views.records;
 
+import javafx.collections.ObservableList;
+
 import com.database.internarispital.DataBase;
+import com.database.internarispital.entities.Consultation;
+import com.database.internarispital.entities.HospitalizationPeriod;
+import com.database.internarispital.entities.patients.HospitalizedPatient;
 import com.database.internarispital.entities.patients.Patient;
 
 public class RecordsViewModel implements IRecordsViewModel 
 {
 	private RecordsVewController mRecordsVewController;
 	private DataBase mDataBase;
-	private Patient mPatient;
+	private HospitalizedPatient mPatient;
 	
-	public RecordsViewModel(RecordsVewController recordsViewController, DataBase database, Patient patient)
+	public RecordsViewModel(RecordsVewController recordsViewController, DataBase database, HospitalizedPatient patient)
 	{
 		mRecordsVewController = recordsViewController;
 		mDataBase = database;
@@ -26,5 +31,12 @@ public class RecordsViewModel implements IRecordsViewModel
 	{
 		mRecordsVewController.setViewModel(this);
 		mRecordsVewController.setHospitalizationPeriods(mDataBase.getHospitalizationPeriods(mPatient));
+	}
+
+	@Override
+	public void requestConsultations(HospitalizationPeriod period) 
+	{
+		ObservableList<Consultation> consultations = mDataBase.getConsulationsForPeriod(mPatient, period);
+		mRecordsVewController.setConsultations(consultations);
 	}
 }

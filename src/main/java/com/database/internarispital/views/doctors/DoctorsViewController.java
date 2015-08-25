@@ -76,7 +76,7 @@ public class DoctorsViewController implements Initializable
 	private Window mWindow;
 	private IDoctorsViewModel mDoctorsViewModel;
 	private Callback<Void, Void> mShowPatientsViewCb;
-	private Callback<Patient, Void> mShowPatientsRecordCb;
+	private Callback<HospitalizedPatient, Void> mShowPatientsRecordCb;
 	
 	@Override
 	public void initialize(URL location, ResourceBundle resources)
@@ -170,11 +170,11 @@ public class DoctorsViewController implements Initializable
 		}
 	}
     
-	public void setOnShowPatientsRecord(Callback<Patient, Void> showPatientsRecordCb)
+	public void setOnShowPatientsRecord(Callback<HospitalizedPatient, Void> showPatientsRecordCb)
 	{
 		mShowPatientsRecordCb = showPatientsRecordCb;
 	}
-    private void showPatientsRecord(Patient patient)
+    private void showPatientsRecord(HospitalizedPatient patient)
     {
     	if(mShowPatientsRecordCb != null)
     	{

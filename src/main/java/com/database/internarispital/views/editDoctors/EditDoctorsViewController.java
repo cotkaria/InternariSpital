@@ -20,6 +20,7 @@ import javafx.scene.control.DatePicker;
 import javafx.scene.control.SingleSelectionModel;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
+import javafx.scene.control.TableView.TableViewSelectionModel;
 import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.stage.Window;
@@ -67,7 +68,7 @@ public class EditDoctorsViewController implements Initializable
     	
     	exitButton.setOnAction(event -> onExitView());
     	addDoctorBT.setOnAction(event -> onAddDoctor());
-    	
+    	removeButton.setOnAction(event -> onRemoveDoctor());
     	specialtyCB.setItems(FXCollections.observableArrayList("A", "B", "C"));
     	gradeCB.setItems(FXCollections.observableArrayList("Dr", "As", "Rez"));
     	
@@ -107,6 +108,18 @@ public class EditDoctorsViewController implements Initializable
     	catch(MissingSelectionException e)
     	{
     		showErrorPopUp(e.getMessage());
+    	}
+    }
+    
+    public void onRemoveDoctor()
+    {
+    	
+    	TableViewSelectionModel<Doctor> model = doctorsTable.getSelectionModel();
+    	if(model.isEmpty() == false)
+    	{
+    		Doctor selection = model.getSelectedItem();
+    		doctorsTable.getItems().remove(selection);
+    		mViewModel.removeDoctor(selection);
     	}
     }
     

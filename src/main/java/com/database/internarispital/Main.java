@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.sql.SQLException;
 
+import com.database.internarispital.entities.patients.HospitalizedPatient;
 import com.database.internarispital.entities.patients.Patient;
 import com.database.internarispital.views.doctors.DoctorsViewController;
 import com.database.internarispital.views.doctors.DoctorsViewModel;
@@ -97,7 +98,7 @@ public class Main extends Application
 			showPatientsView();
 			return null;
 		});
-		Callback<Patient, Void> showPatientsRecordCb = (patient ->
+		Callback<HospitalizedPatient, Void> showPatientsRecordCb = (patient ->
 		{
 			showPatientsRecord(patient);
 			return null;
@@ -107,7 +108,7 @@ public class Main extends Application
 		
 	}
 	
-	public void showPatientsRecord(Patient patient)
+	public void showPatientsRecord(HospitalizedPatient patient)
 	{
 		final Stage recordStage = new Stage();
 		recordStage.setTitle("Medical Record for " + patient.getName());

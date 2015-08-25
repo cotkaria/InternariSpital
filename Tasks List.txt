@@ -8,6 +8,22 @@ DISCHARGE PATIENT
 
 CONSULTATION (Doctor's View)
 -constraint on consultation date
--prevent the user from opening multiple instances of the Medical Record view for the same patient.
+-prevent the user from opening multiple instances of the Medical Record view for the same patient.!!!
+
 
 ADMINISTRATION
+-add views for editing the:
+	- doctors
+	- diagnostics categories
+	- sections, wards and beds
+-for the selected doctor, show the number and the patients he's treated(currently have under treatment - by default). *2 date pickers
+-create a graphic with the occupancy rate of sections during a specific time frame.
+	
+PATIENT'S MEDICAL RECORD
+-for the selected patient, show for each period of admission the consultations he received.
+-create a standings with the age categories based on how much they were affected by a certain disease within a specific time frame.	
+
+
+IN DATABASE
+-Select all consultations for a patient in a specified time spell
+-close all secondary windows when main window is closed.

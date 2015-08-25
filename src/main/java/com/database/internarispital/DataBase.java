@@ -7,6 +7,7 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.Date;
 
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -77,7 +78,7 @@ public class DataBase
 	
 	private void initInsertDoctorStatement() throws SQLException
 	{
-		String sqlQuery = "INSERT INTO Doctors VALUES (?, ?, ?, ?)";
+		String sqlQuery = "INSERT INTO Doctors VALUES (?, ?, ?, ?, ?)";
 		mInsertDoctorStatement = mConnection.prepareStatement(sqlQuery, Statement.RETURN_GENERATED_KEYS);
 	}
 	private void initInsertPatientStatement() throws SQLException
@@ -144,6 +145,7 @@ public class DataBase
 			mInsertDoctorStatement.setString(2, doctorData.doctorSurnameProperty().getValue());
 			mInsertDoctorStatement.setString(3, doctorData.gradeProperty().getValue());
 			mInsertDoctorStatement.setString(4, doctorData.specialityProperty().getValue());
+			mInsertDoctorStatement.setBoolean(5, true);
 
 			int rowsModified = mInsertDoctorStatement.executeUpdate();
 			int doctorId = -1;
@@ -402,7 +404,7 @@ public class DataBase
 	public ObservableList<Doctor> getDoctors()
 	{
 		ObservableList<Doctor> doctorsList = FXCollections.observableArrayList();
-		String sqlQuery = "SELECT * FROM Doctors";
+		String sqlQuery = "SELECT * FROM Doctors WHERE active = 1";
 		try
 		{
 			ResultSet resultSet = mStatement.executeQuery(sqlQuery);
@@ -555,11 +557,40 @@ public class DataBase
 		}
 		return consultationList;
 	}
+
+	public ObservableList<Consultation> getConsulationsForPeriod(HospitalizedPatient patient, HospitalizationPeriod period) 
+	{
+		ObservableList<Consultation> consultationList = FXCollections.observableArrayList();
+		String sqlQuery = "SELECT * FROM Consultations C "  
+		  		+ "INNER JOIN Doctors Dr on C.doctor_Id = Dr.doctor_Id " 
+		  		+ "INNER JOIN Diagnostics D ON C.diag_Id = D.diag_Id "
+		  		+ "INNER JOIN Diag_Category DC ON D.category_Id = DC.category_Id "
+		  		+ "WHERE C.patient_Id = " + patient.getPatientId() + " " 
+		  		+ "AND C.consultation_date BETWEEN '" + period.getAdmittanceDateAsString() + "' AND '" + period.getDischargeDateAsString() + "' "
+		  		+ "ORDER BY C.consultation_date DESC";
+		try 
+		{
+			ResultSet resultSet = mStatement.executeQuery(sqlQuery);
+			if(resultSet.next())
+			{
+				consultationList.add(parseResultSetForConsultation(resultSet, patient));
+			}
+			else
+			{
+				consultationList.add(new Consultation(patient));
+			}
+		} 
+		catch (SQLException e) 
+		{
+			e.printStackTrace();
+		}
+		return consultationList;
+	}
+
 	
 	private Consultation parseResultSetForConsultation(ResultSet resultSet, HospitalizedPatient hospitalizedPatient) throws SQLException
 	{
 		int consultationId = resultSet.getInt("consultation_Id");
-		//HospitalizedPatient hospitalizedPatient = parseResultSetForHospitalizedPatient(resultSet);
 		Doctor doctor = parseResultSetForDoctor(resultSet);
 		Diagnostic diagnostic = parseResultSetForDiagnostic(resultSet);
 		String consultationDate = resultSet.getString("consultation_date");
@@ -591,8 +622,24 @@ public class DataBase
 	{
 		int hospitalizationId = resultSet.getInt("hospitalization_Id");
 		int patientId = resultSet.getInt("patient_Id");
-		String admittanceDate = resultSet.getString("admittance_date");
-		String dischargeDate = resultSet.getString("discharge_date");		
+		Date admittanceDate = resultSet.getTimestamp("admittance_date");
+		Date dischargeDate = resultSet.getTimestamp("discharge_date");
 		return new HospitalizationPeriod(hospitalizationId, patientId, admittanceDate, dischargeDate);
 	}
+
+	public void setDoctorInactive(Doctor doctor) 
+	{
+		String sqlUpdate = "UPDATE Doctors " + 
+					  	   "SET active = 0 " +
+						   "WHERE doctor_Id = " + doctor.doctorIdProperty().get();
+		try
+		{
+			mStatement.executeUpdate(sqlUpdate);
+		}
+		catch (SQLException e) 
+		{
+			e.printStackTrace();
+		}
+	}
+
 }

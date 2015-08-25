@@ -1,20 +1,43 @@
 package com.database.internarispital.entities;
 
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.Date;
 
 public class HospitalizationPeriod 
 {
 	private int mHospitalizationId;
 	private int mPatientId;
-	private String mAdmittanceDate;
-	private String mDischargeDate;
+	private SimpleDateFormat mDateFormat;
+	private Date mAdmittanceDate;
+	private Date mDischargeDate;
+	private String mAdmittanceDateAsString;
+	private String mDischargeDateAsString;
 	
-	public HospitalizationPeriod(int hospitalizationId, int patientId, String admittanceDate, String dischargeDate)
+	public HospitalizationPeriod(int hospitalizationId, int patientId, Date admittanceDate, Date dischargeDate)
 	{
+		mDateFormat = new SimpleDateFormat("yyyy.MM.dd HH:mm");
 		mHospitalizationId = hospitalizationId;
 		mPatientId = patientId;
-		mAdmittanceDate = admittanceDate;
-		mDischargeDate = dischargeDate;
+		mAdmittanceDate = getDateOrDefault(admittanceDate);
+		mDischargeDate = getDateOrDefault(dischargeDate);
+		mAdmittanceDateAsString = formatDate(admittanceDate, "Never admitted");
+		mDischargeDateAsString = formatDate(dischargeDate, "Still admitted");
+	}
+	
+	private Date getDateOrDefault(Date date)
+	{
+		return (date != null) ? date : Calendar.getInstance().getTime(); 
+	}
+	
+	private String formatDate(Date date, String defaultValue)
+	{
+		String format = defaultValue;
+		if(date != null)
+		{
+			format = mDateFormat.format(date);
+		}
+		return format;
 	}
 	
 	public int getHospitalizationId()
@@ -27,10 +50,30 @@ public class HospitalizationPeriod
 		return  mPatientId;
 	}
 	
+	public Date getAdmittanceDate()
+	{
+		return mAdmittanceDate;
+	}
+	
+	public Date getDischargeDate()
+	{
+		return mDischargeDate;
+	}
+	
+	public String getAdmittanceDateAsString()
+	{
+		return mDateFormat.format(mAdmittanceDate);
+	}
+	
+	public String getDischargeDateAsString()
+	{
+		return mDateFormat.format(mDischargeDate);
+	}
+	
 	@Override
 	public String toString()
 	{
-		return mAdmittanceDate + " - " + mDischargeDate;
+		return mAdmittanceDateAsString + " - " + mDischargeDateAsString;
 	}
 	
 }

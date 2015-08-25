@@ -28,13 +28,18 @@ public class EditDoctorsViewModel implements IEditDoctorsViewModel
 	{
 		mViewController.setViewModel(this);
 		mViewController.setOnExit(mReturnCallback);
-		mViewController.setDoctors(mDataBase.getDoctors());
+		mViewController.setDoctors(mDataBase.getDoctors());		
 	}
 	
 	public void addDoctor(DoctorData data)
 	{
 		Doctor doctor = mDataBase.insertDoctor(data);
 		mViewController.addDoctor(doctor);
-		//TODO add to the list of doctors of the ViewController
+	}
+	
+	public void removeDoctor(Doctor doctor)
+	{
+		mDataBase.setDoctorInactive(doctor);
+		
 	}
 }

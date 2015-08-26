@@ -4,15 +4,18 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.sql.SQLException;
 
+import com.database.internarispital.entities.doctors.Doctor;
 import com.database.internarispital.entities.patients.HospitalizedPatient;
 import com.database.internarispital.entities.patients.Patient;
+import com.database.internarispital.views.doctorHistory.DoctorHistoryViewController;
+import com.database.internarispital.views.doctorHistory.DoctorHistoryViewModel;
 import com.database.internarispital.views.doctors.DoctorsViewController;
 import com.database.internarispital.views.doctors.DoctorsViewModel;
 import com.database.internarispital.views.editDoctors.EditDoctorsViewController;
 import com.database.internarispital.views.editDoctors.EditDoctorsViewModel;
 import com.database.internarispital.views.patients.PatientsViewController;
 import com.database.internarispital.views.patients.PatientsViewModel;
-import com.database.internarispital.views.records.RecordsVewController;
+import com.database.internarispital.views.records.RecordsViewController;
 import com.database.internarispital.views.records.RecordsViewModel;
 
 import javafx.application.Application;
@@ -30,6 +33,7 @@ public class Main extends Application
 	private static final String DOCTORS_VIEW_PATH = "DoctorsView.fxml";
 	private static final String RECORDS_VIEW_PATH = "RecordsView.fxml";
 	private static final String EDIT_DOCTORS_VIEW_PATH = "EditDoctorsView.fxml";
+	private static final String DOCTOR_HISTORY_VIEW_PATH = "DoctorHistoryView.fxml";
 	
 	private static final String VERSION = "1.0.0";
 	private static final String APP_NAME = "Patient Management";
@@ -69,7 +73,7 @@ public class Main extends Application
 		
 	}
 	
-	public void showPatientsView()
+	private void showPatientsView()
 	{
 		setTitle("Patient View");
 		PatientsViewController patientsViewController = (PatientsViewController)loadScene(PATIENTS_VIEW_PATH, mStage);
@@ -88,7 +92,7 @@ public class Main extends Application
 		new PatientsViewModel(patientsViewController, mDataBase, showDoctorsViewCb, showAdminViewCb);
 	}
 	
-	public void showDoctorsView()
+	private void showDoctorsView()
 	{		
 		setTitle("Patient Consultation");
 		DoctorsViewController doctorsViewController = (DoctorsViewController)loadScene(DOCTORS_VIEW_PATH, mStage);
@@ -103,21 +107,35 @@ public class Main extends Application
 			showPatientsRecord(patient);
 			return null;
 		});
+		Callback<Doctor, Void> showDoctorHistoryCb = (doctor ->
+		{
+			showDoctorHistory(doctor);
+			return null;
+		});
 		
-		new DoctorsViewModel(doctorsViewController, mDataBase, showPatientsViewCb, showPatientsRecordCb);
+		new DoctorsViewModel(doctorsViewController, mDataBase, showPatientsViewCb, showPatientsRecordCb, showDoctorHistoryCb);
 		
 	}
 	
-	public void showPatientsRecord(HospitalizedPatient patient)
+	private void showDoctorHistory(Doctor doctor)
+	{
+		final Stage historyStage = new Stage();
+		historyStage.setTitle("Treated Patients by  " + doctor.getName());
+		historyStage.setResizable(false);
+		DoctorHistoryViewController doctorHistoryViewController = (DoctorHistoryViewController) loadScene(DOCTOR_HISTORY_VIEW_PATH, historyStage);
+		new DoctorHistoryViewModel(doctorHistoryViewController, mDataBase, doctor);
+	}
+	
+	private void showPatientsRecord(HospitalizedPatient patient)
 	{
 		final Stage recordStage = new Stage();
 		recordStage.setTitle("Medical Record for " + patient.getName());
 		recordStage.setResizable(false);
-		RecordsVewController recordsViewController = (RecordsVewController) loadScene(RECORDS_VIEW_PATH, recordStage);
+		RecordsViewController recordsViewController = (RecordsViewController) loadScene(RECORDS_VIEW_PATH, recordStage);
 		new RecordsViewModel(recordsViewController, mDataBase, patient);
 	}
 	
-	public void showAdministrationView()
+	private void showAdministrationView()
 	{
 		setTitle("Administration View");
 		EditDoctorsViewController controller = (EditDoctorsViewController) loadScene(EDIT_DOCTORS_VIEW_PATH, mStage);

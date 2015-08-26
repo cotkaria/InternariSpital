@@ -641,5 +641,30 @@ public class DataBase
 			e.printStackTrace();
 		}
 	}
+	
+	public ObservableList<Consultation> getDoctorHistory(Doctor doctor)
+	{
+		ObservableList<Consultation> consultationList = FXCollections.observableArrayList();
+		
+		String sqlQuery = "SELECT TOP 1 * FROM Consultations C "  
+			  		+ "INNER JOIN Doctors Dr on C.doctor_Id = Dr.doctor_Id " 
+			  		+ "INNER JOIN Diagnostics D ON C.diag_Id = D.diag_Id "
+			  		+ "INNER JOIN Diag_Category DC ON D.category_Id = DC.category_Id "
+			  		+ "WHERE C.patient_Id = " + hospitalizedPatient.getPatientId() + " "
+			  		+ "ORDER BY C.consultation_date DESC";
+		try 
+		{
+			ResultSet resultSet = mStatement.executeQuery(sqlQuery);
+			while(resultSet.next())
+			{
+				consultationList.add(parseResultSetForConsultation(resultSet, hospitalizedPatient));
+			}
+		} 
+		catch (SQLException e) 
+		{
+			e.printStackTrace();
+		}
+		return consultationList;
+	}
 
 }

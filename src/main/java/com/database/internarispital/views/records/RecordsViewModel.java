@@ -10,11 +10,11 @@ import com.database.internarispital.entities.patients.Patient;
 
 public class RecordsViewModel implements IRecordsViewModel 
 {
-	private RecordsVewController mRecordsVewController;
+	private RecordsViewController mRecordsVewController;
 	private DataBase mDataBase;
 	private HospitalizedPatient mPatient;
 	
-	public RecordsViewModel(RecordsVewController recordsViewController, DataBase database, HospitalizedPatient patient)
+	public RecordsViewModel(RecordsViewController recordsViewController, DataBase database, HospitalizedPatient patient)
 	{
 		mRecordsVewController = recordsViewController;
 		mDataBase = database;

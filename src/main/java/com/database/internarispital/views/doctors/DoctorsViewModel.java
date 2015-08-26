@@ -15,15 +15,18 @@ public class DoctorsViewModel implements IDoctorsViewModel
 	private DataBase mDataBase;
 	private Callback<Void, Void> mShowPatientsView;
 	private Callback<HospitalizedPatient, Void> mShowPatientsRecord;
+	private Callback<Doctor, Void> mShowDoctorHistory;
 	
 	public DoctorsViewModel(DoctorsViewController doctorsViewController, DataBase dataBase, 
 			Callback<Void, Void> showPatientsView,
-			Callback<HospitalizedPatient, Void> showPatientsRecord)
+			Callback<HospitalizedPatient, Void> showPatientsRecord, 
+			Callback<Doctor, Void> showDoctorHistory)
 	{
 		mDoctorsViewController = doctorsViewController;
 		mDataBase = dataBase;
 		mShowPatientsView = showPatientsView;
 		mShowPatientsRecord = showPatientsRecord;
+		mShowDoctorHistory = showDoctorHistory;
 		if(doctorsViewController != null)
 		{
 			configController();
@@ -35,6 +38,7 @@ public class DoctorsViewModel implements IDoctorsViewModel
 		mDoctorsViewController.setViewModel(this);
 		mDoctorsViewController.setOnShowPatientsView(mShowPatientsView);
 		mDoctorsViewController.setOnShowPatientsRecord(mShowPatientsRecord);
+		mDoctorsViewController.setShowDoctorHistory(mShowDoctorHistory);
 		mDoctorsViewController.setDoctors(mDataBase.getDoctors());
 		mDoctorsViewController.setConsultations(mDataBase.getConsultations());
 		mDoctorsViewController.setDiagCategories(mDataBase.getDiagCategories());

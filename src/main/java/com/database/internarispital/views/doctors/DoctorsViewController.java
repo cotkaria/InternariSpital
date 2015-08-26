@@ -15,6 +15,7 @@ import com.database.internarispital.entities.doctors.Doctor;
 import com.database.internarispital.entities.patients.HospitalizedPatient;
 import com.database.internarispital.entities.patients.Patient;
 import com.database.internarispital.views.exception.MissingSelectionException;
+import com.database.internarispital.util.InputHelper;
 
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.value.ObservableValue;
@@ -58,6 +59,9 @@ public class DoctorsViewController implements Initializable
 	@FXML 
 	private Button diagnosticateButton;
 	
+	@FXML 
+	private Button 	doctorHistoryButton;
+	
 	@FXML
 	private TableColumn<Consultation, String> patientNameColumn;
 	
@@ -77,6 +81,7 @@ public class DoctorsViewController implements Initializable
 	private IDoctorsViewModel mDoctorsViewModel;
 	private Callback<Void, Void> mShowPatientsViewCb;
 	private Callback<HospitalizedPatient, Void> mShowPatientsRecordCb;
+	private Callback<Doctor, Void> mShowDoctorHistoryCb;
 	
 	@Override
 	public void initialize(URL location, ResourceBundle resources)
@@ -84,7 +89,7 @@ public class DoctorsViewController implements Initializable
     	configurePatientsTable();
     	consultationTable.setOnMouseClicked(event->
     	{
-    		if (event.getClickCount() == 2 && event.getButton().equals(MouseButton.PRIMARY))
+    		if (InputHelper.isDoubleClick(event))
     		{
     			try
     			{
@@ -99,7 +104,7 @@ public class DoctorsViewController implements Initializable
 		patientsViewButton.setOnAction(event -> onShowPatientsView());
 		diagCategoryList.setOnAction(event -> onDiagCategorySelected());
 		diagnosticateButton.setOnAction(event -> onDiagnosticate());
-		
+		doctorHistoryButton.setOnAction(event -> showDoctorHistory());
 		diagDatePicker.setValue(LocalDate.now());
 		diagDatePicker.setOnAction(event->
 		{
@@ -120,48 +125,69 @@ public class DoctorsViewController implements Initializable
     private void configurePatientsTable()
     {
     	patientNameColumn.setCellValueFactory(new Callback<CellDataFeatures<Consultation, String>, ObservableValue<String>>()
-    			{
-		    		public ObservableValue<String> call (CellDataFeatures<Consultation, String> consultationCellData)
-		    		{
-		    			Patient patient = consultationCellData.getValue().getPatient();
-		    			return new SimpleStringProperty(patient.getName());
-		    		}
-    			});
+		{
+    		public ObservableValue<String> call (CellDataFeatures<Consultation, String> consultationCellData)
+    		{
+    			Patient patient = consultationCellData.getValue().getPatient();
+    			return new SimpleStringProperty(patient.getName());
+    		}
+		});
     	accomodationColumn.setCellValueFactory(new Callback<CellDataFeatures<Consultation, String>, ObservableValue<String>>()
-    			{
-    				public ObservableValue<String> call (CellDataFeatures<Consultation, String> consultationCellData)
-    				{
-    					HospitalizedPatient patient = consultationCellData.getValue().getPatient();
-    					String section = patient.sectionNameProperty().getValue();
-    					Integer ward = patient.wardNumberProperty().getValue();
-    					return new SimpleStringProperty(section + ", " + ward);
-    				}
-    			});
+		{
+			public ObservableValue<String> call (CellDataFeatures<Consultation, String> consultationCellData)
+			{
+				HospitalizedPatient patient = consultationCellData.getValue().getPatient();
+				String section = patient.sectionNameProperty().getValue();
+				Integer ward = patient.wardNumberProperty().getValue();
+				return new SimpleStringProperty(section + ", " + ward);
+			}
+		});
       	doctorNameColumn.setCellValueFactory(new Callback<CellDataFeatures<Consultation, String>, ObservableValue<String>>()
-    			{
-    				public ObservableValue<String> call (CellDataFeatures<Consultation, String> consultationCellData)
-    				{
-    					Doctor doctor = consultationCellData.getValue().getDoctor();
-    					return new SimpleStringProperty(doctor.getName());
-    				}
-    			});
+		{
+			public ObservableValue<String> call (CellDataFeatures<Consultation, String> consultationCellData)
+			{
+				Doctor doctor = consultationCellData.getValue().getDoctor();
+				return new SimpleStringProperty(doctor.getName());
+			}
+		});
       	diagnosticColumn.setCellValueFactory(new Callback<CellDataFeatures<Consultation, String>, ObservableValue<String>>()
-    			{
-    				public ObservableValue<String> call (CellDataFeatures<Consultation, String> consultationCellData)
-    				{
-    					Diagnostic diagnostic = consultationCellData.getValue().getDiagnostic();
-    					
-    					return new SimpleStringProperty(diagnostic.diagNameProperty().getValue());
-    				}
-    			});
+		{
+			public ObservableValue<String> call (CellDataFeatures<Consultation, String> consultationCellData)
+			{
+				Diagnostic diagnostic = consultationCellData.getValue().getDiagnostic();
+				
+				return new SimpleStringProperty(diagnostic.diagNameProperty().getValue());
+			}
+		});
     	
       	consultationDate.setCellValueFactory(new PropertyValueFactory<Consultation, String>("consultationDate"));
     }
 
+    public void setShowDoctorHistory(Callback<Doctor, Void> showDoctorHistoryCb)
+    {
+    	mShowDoctorHistoryCb = showDoctorHistoryCb;
+    }
+
+    private void showDoctorHistory()
+    {
+    	if(mShowDoctorHistoryCb != null)
+    	{
+    		try
+    		{
+    			mShowDoctorHistoryCb.call(getSelectedDoctor());
+    		}
+    		catch (MissingSelectionException e) 
+    		{
+    			showErrorPopUp(e.getMessage());
+    		}
+    	}
+    }
+    
     public void setOnShowPatientsView(Callback<Void, Void> showPatientsViewCb)
     {
     	mShowPatientsViewCb = showPatientsViewCb;
     }
+    
     private void onShowPatientsView()
 	{
 		if(mShowPatientsViewCb != null)
@@ -174,6 +200,7 @@ public class DoctorsViewController implements Initializable
 	{
 		mShowPatientsRecordCb = showPatientsRecordCb;
 	}
+	
     private void showPatientsRecord(HospitalizedPatient patient)
     {
     	if(mShowPatientsRecordCb != null)
@@ -232,7 +259,7 @@ public class DoctorsViewController implements Initializable
     	HospitalizedPatient patient = null;
     	SelectionModel<Consultation> selectionModel = consultationTable.getSelectionModel();
     	if(!selectionModel.isEmpty())
-    	{	//focus on the table is lost so we should check if there is really a patient selected 
+    	{	//focus on the table can be lost so we should check if there is really a patient selected 
     		Consultation consultation = selectionModel.getSelectedItem();
     		if(consultation != null)
     		{

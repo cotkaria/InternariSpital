@@ -1,8 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.scene.effect.*?>
-<?import javafx.scene.control.*?>
 <?import java.lang.*?>
+<?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
 <Pane fx:id="root" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="632.0" prefWidth="970.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.database.internarispital.views.doctors.DoctorsViewController">
@@ -29,5 +28,6 @@
       <DatePicker fx:id="diagDatePicker" layoutX="761.0" layoutY="238.0" prefHeight="25.0" prefWidth="178.0" promptText="Select Date" />
       <Label layoutX="643.0" layoutY="242.0" text="Diagnostication date" />
       <Button fx:id="diagnosticateButton" layoutX="818.0" layoutY="304.0" mnemonicParsing="false" text="Diagnosticate" />
+      <Button fx:id="doctorHistoryButton" layoutX="799.0" layoutY="354.0" mnemonicParsing="false" text="Show Doctor History" />
    </children>
 </Pane>

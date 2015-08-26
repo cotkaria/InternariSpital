@@ -20,10 +20,9 @@ ADMINISTRATION
 -create a graphic with the occupancy rate of sections during a specific time frame.
 	
 PATIENT'S MEDICAL RECORD
--for the selected patient, show for each period of admission the consultations he received.
+-for the selected patient, show for each period of admission the consultations he received - DONE
 -create a standings with the age categories based on how much they were affected by a certain disease within a specific time frame.	
 
 
 IN DATABASE
--Select all consultations for a patient in a specified time spell
--close all secondary windows when main window is closed.
+-close all secondary windows when main window is closed - 

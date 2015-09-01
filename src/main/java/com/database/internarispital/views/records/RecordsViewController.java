@@ -23,7 +23,7 @@ import javafx.scene.control.TableColumn.CellDataFeatures;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.util.Callback;
 
-public class RecordsVewController implements Initializable
+public class RecordsViewController implements Initializable
 {
 
     @FXML
@@ -73,7 +73,6 @@ public class RecordsVewController implements Initializable
     					return new SimpleStringProperty(doctor.getName());
     				}
     			});
-    	
     }
 	
 	public void setViewModel(IRecordsViewModel recordsViewModel)

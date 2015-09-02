@@ -19,6 +19,10 @@ public class HospitalizedPatient extends Patient
 		mBedNumber = new SimpleIntegerProperty(bedNumber);		
 	}
 
+	public HospitalizedPatient(Patient patient)
+	{
+		this(patient, "", -1, -1);
+	}
 	public StringProperty sectionNameProperty()
 	{
 		return mSectionName;

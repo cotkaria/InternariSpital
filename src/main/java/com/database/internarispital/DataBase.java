@@ -195,16 +195,21 @@ public class DataBase
 	}
 	private HospitalizedPatient parseResultSetForHospitalizedPatient(ResultSet resultSet) throws SQLException
 	{
-		int patientId = resultSet.getInt("patient_Id");
-		String patientName = resultSet.getString("patient_name");
-		String patientSurname = resultSet.getString("patient_surname");
-		String birthDate = resultSet.getString("birth_date");
 		String section = resultSet.getString("section_Name");
 		int wardNumber = resultSet.getInt("ward_number");
 		int bedNumber = resultSet.getInt("bed_number");
 		
-		return new HospitalizedPatient(new Patient(patientId, new PatientData(patientName, patientSurname, birthDate)), section, wardNumber, bedNumber);
+		return new HospitalizedPatient(parseResultSetForPatient(resultSet), section, wardNumber, bedNumber);
 		
+	}
+	
+	private Patient parseResultSetForPatient(ResultSet resultSet) throws SQLException
+	{
+		int patientId = resultSet.getInt("patient_Id");
+		String patientName = resultSet.getString("patient_name");
+		String patientSurname = resultSet.getString("patient_surname");
+		String birthDate = resultSet.getString("birth_date");
+		return new Patient(patientId, new PatientData(patientName, patientSurname, birthDate));
 	}
 	
 	public HospitalizedPatient getHospitalizedPatient(Patient patient)
@@ -644,20 +649,33 @@ public class DataBase
 	
 	public ObservableList<Consultation> getDoctorHistory(Doctor doctor)
 	{
+		return getDoctorHistory(doctor, "", "", false, true);
+	}
+	
+	public ObservableList<Consultation> getDoctorHistory(Doctor doctor, String beginDate, String endDate, boolean onlyCurrentlyAdmitted, boolean showAllHistory)
+	{
 		ObservableList<Consultation> consultationList = FXCollections.observableArrayList();
 		
-		String sqlQuery = "SELECT TOP 1 * FROM Consultations C "  
-			  		+ "INNER JOIN Doctors Dr on C.doctor_Id = Dr.doctor_Id " 
-			  		+ "INNER JOIN Diagnostics D ON C.diag_Id = D.diag_Id "
-			  		+ "INNER JOIN Diag_Category DC ON D.category_Id = DC.category_Id "
-			  		+ "WHERE C.patient_Id = " + hospitalizedPatient.getPatientId() + " "
-			  		+ "ORDER BY C.consultation_date DESC";
+		String hospitalizedPatientsQuery = onlyCurrentlyAdmitted ? "INNER JOIN Hospitalizations AS H ON P.patient_Id = H.patient_Id " : "";
+		String historyPeriodQuery = showAllHistory ? "" : "AND C.consultation_date BETWEEN '" + beginDate + "' AND '" + endDate + "' ";
+		String sqlQuery = "SELECT * FROM Patients P " +  hospitalizedPatientsQuery
+				+ "INNER JOIN Consultations C on P.patient_Id = C.patient_Id " 
+				+ "INNER JOIN Doctors Dr on C.doctor_Id = Dr.doctor_Id "
+				+ "INNER JOIN Diagnostics D ON C.diag_Id = D.diag_Id "
+				+ "INNER JOIN Diag_Category DC ON D.category_Id = DC.category_Id " 
+				+ "WHERE Dr.doctor_Id = " + doctor.doctorIdProperty().getValue() + " " 
+				+ "AND consultation_Id = (SELECT TOP 1 Cons.consultation_Id " 
+										+ "FROM Consultations Cons "
+										+ "WHERE C.patient_Id = Cons.patient_Id "
+										+ "ORDER BY Cons.consultation_date DESC) "
+				+ historyPeriodQuery 
+				+ "ORDER BY C.consultation_date DESC";
 		try 
 		{
 			ResultSet resultSet = mStatement.executeQuery(sqlQuery);
 			while(resultSet.next())
 			{
-				consultationList.add(parseResultSetForConsultation(resultSet, hospitalizedPatient));
+				consultationList.add(parseResultSetForDoctorHistory(resultSet, doctor));
 			}
 		} 
 		catch (SQLException e) 
@@ -667,4 +685,12 @@ public class DataBase
 		return consultationList;
 	}
 
+	private Consultation parseResultSetForDoctorHistory(ResultSet resultSet, Doctor doctor) throws SQLException
+	{
+		int consultationId = resultSet.getInt("consultation_Id");
+		Diagnostic diagnostic = parseResultSetForDiagnostic(resultSet);
+		String consultationDate = resultSet.getString("consultation_date");
+		HospitalizedPatient hospitalizedPatient = new HospitalizedPatient(parseResultSetForPatient(resultSet)); 
+		return new Consultation(consultationId, hospitalizedPatient, doctor, diagnostic, consultationDate);
+	}
 }

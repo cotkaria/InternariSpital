@@ -123,7 +123,12 @@ public class Main extends Application
 		historyStage.setTitle("Treated Patients by  " + doctor.getName());
 		historyStage.setResizable(false);
 		DoctorHistoryViewController doctorHistoryViewController = (DoctorHistoryViewController) loadScene(DOCTOR_HISTORY_VIEW_PATH, historyStage);
-		new DoctorHistoryViewModel(doctorHistoryViewController, mDataBase, doctor);
+		Callback<HospitalizedPatient, Void> showPatientsRecordCb = (patient ->
+		{
+			showPatientsRecord(patient);
+			return null;
+		});
+		new DoctorHistoryViewModel(doctorHistoryViewController, mDataBase, doctor, showPatientsRecordCb);
 	}
 	
 	private void showPatientsRecord(HospitalizedPatient patient)
@@ -175,6 +180,7 @@ public class Main extends Application
 		}
 		return null;
 	}
+	
 	
 	private void setTitle(String name)
 	{

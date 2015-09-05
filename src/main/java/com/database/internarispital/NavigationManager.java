@@ -26,14 +26,20 @@ public class NavigationManager
 	{
 		VIEW_LEVELS = new HashMap<Views, List<AccountTypes>>();
 		VIEW_LEVELS.put(Views.MAIN_VIEW,  					
-				Arrays.asList(AccountTypes.Visitor, AccountTypes.Patient, AccountTypes.Doctor, AccountTypes.Admin));
+				Arrays.asList(AccountTypes.Patient, AccountTypes.Doctor, AccountTypes.Admin, AccountTypes.Root));
 		VIEW_LEVELS.put(Views.PATIENTS_BROWSE_VIEW, 		
-				Arrays.asList(AccountTypes.Visitor, AccountTypes.Patient, AccountTypes.Doctor, AccountTypes.Admin));
-		VIEW_LEVELS.put(Views.PATIENTS_HOSPITALIZE_VIEW, 	Arrays.asList(AccountTypes.Doctor));
-		VIEW_LEVELS.put(Views.PATIENTS_EDIT_VIEW, 			Arrays.asList(AccountTypes.Admin));
-		VIEW_LEVELS.put(Views.DOCTORS_BROWSE_VIEW, 			Arrays.asList(AccountTypes.Doctor, AccountTypes.Admin));
-		VIEW_LEVELS.put(Views.DOCTORS_HOSPITALIZE_VIEW, 	Arrays.asList(AccountTypes.Doctor));
-		VIEW_LEVELS.put(Views.DOCTORS_EDIT_VIEW, 			Arrays.asList(AccountTypes.Admin));
-		VIEW_LEVELS.put(Views.FACILITIES_EDIT_VIEW, 		Arrays.asList(AccountTypes.Admin));
+				Arrays.asList(AccountTypes.Patient, AccountTypes.Doctor, AccountTypes.Admin, AccountTypes.Root));
+		VIEW_LEVELS.put(Views.PATIENTS_HOSPITALIZE_VIEW, 	
+				Arrays.asList(AccountTypes.Doctor, AccountTypes.Root));
+		VIEW_LEVELS.put(Views.PATIENTS_EDIT_VIEW, 			
+				Arrays.asList(AccountTypes.Admin, AccountTypes.Root));
+		VIEW_LEVELS.put(Views.DOCTORS_BROWSE_VIEW, 			
+				Arrays.asList(AccountTypes.Doctor, AccountTypes.Admin, AccountTypes.Root));
+		VIEW_LEVELS.put(Views.DOCTORS_HOSPITALIZE_VIEW, 	
+				Arrays.asList(AccountTypes.Doctor, AccountTypes.Root));
+		VIEW_LEVELS.put(Views.DOCTORS_EDIT_VIEW, 			
+				Arrays.asList(AccountTypes.Admin, AccountTypes.Root));
+		VIEW_LEVELS.put(Views.FACILITIES_EDIT_VIEW, 		
+				Arrays.asList(AccountTypes.Admin, AccountTypes.Root));
 	}
 }

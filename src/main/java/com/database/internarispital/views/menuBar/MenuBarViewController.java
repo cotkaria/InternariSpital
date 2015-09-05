@@ -64,7 +64,7 @@ public class MenuBarViewController implements Initializable
 	private MenuItem logOutButton;
     
     private IMenuBarViewModel mViewModel;
-    private AccountTypes mAccountType = AccountTypes.Visitor;
+    private AccountTypes mAccountType = AccountTypes.Patient;
     
     private Map<NavigationManager.Views, MenuItem> mMenuItemsToViewsMap;
     private List<Menu> mMenus;

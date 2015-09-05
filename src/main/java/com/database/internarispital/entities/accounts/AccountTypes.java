@@ -2,26 +2,14 @@ package com.database.internarispital.entities.accounts;
 
 public enum AccountTypes
 {
-	Visitor(1),
-	Patient(2),
-	Doctor(3),
-	Admin(10);
-	
-	private int mCleareance;
-
-	private AccountTypes(int clearence)
-	{
-		mCleareance = clearence;
-	}
-	
-	public int getClearenceLevel()
-	{
-		return mCleareance;
-	}
+	Patient,
+	Doctor,
+	Admin,
+	Root;
 	
 	public static AccountTypes getValueFromString(String name)
 	{
-		AccountTypes type = Visitor;
+		AccountTypes type = Patient;
 		try
 		{
 			type = valueOf(name);

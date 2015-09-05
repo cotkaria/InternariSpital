@@ -9,10 +9,15 @@ public class Account
 	
 	public Account(int id, String name, String password, String accountType)
 	{
+		this(id, name, password, AccountTypes.getValueFromString(accountType));
+	}
+	
+	public Account(int id, String name, String password, AccountTypes accountType)
+	{
 		mId = id;
 		mName = name;
 		mPassword = password;
-		mAccountType = AccountTypes.getValueFromString(accountType);
+		mAccountType = accountType;
 	}
 	
 	public int getId()

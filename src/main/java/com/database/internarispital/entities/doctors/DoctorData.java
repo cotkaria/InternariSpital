@@ -9,17 +9,29 @@ public class DoctorData
 	private StringProperty mDoctorSurname;
 	private StringProperty mSpeciality;
 	private StringProperty mGrade;
+	private int mAccountId;
 	
-	public DoctorData(String doctorName, String doctorSurname, String grade, String speciality)
+	public DoctorData(DoctorData data)
+	{
+		this(data.mDoctorName.getValue(), data.mDoctorSurname.getValue(), 
+				data.mGrade.getValue(), data.mSpeciality.getValue(),
+				data.mAccountId);
+	}
+	public DoctorData(String doctorName, String doctorSurname, String grade, 
+			String speciality)
+	{
+		this(doctorName, doctorSurname, 
+				grade, speciality,
+				-1);
+	}
+	public DoctorData(String doctorName, String doctorSurname, String grade, 
+			String speciality, int accountId)
 	{
 		mDoctorName = new SimpleStringProperty(doctorName);
 		mDoctorSurname = new SimpleStringProperty(doctorSurname);
 		mGrade = new SimpleStringProperty(grade);
 		mSpeciality = new SimpleStringProperty(speciality);
-	}
-	public DoctorData(DoctorData data)
-	{
-		this(data.mDoctorName.getValue(), data.mDoctorSurname.getValue(), data.mGrade.getValue(), data.mSpeciality.getValue());
+		mAccountId = accountId;
 	}
 	public StringProperty nameProperty()
 	{
@@ -42,6 +54,17 @@ public class DoctorData
 	{
 		return mDoctorName.getValue() + " " + mDoctorSurname.getValue();
 	}
+	
+	public void setAccountId(int id)
+	{
+		mAccountId = id;
+	}
+	
+	public int getAccountId()
+	{
+		return mAccountId;
+	}
+	
 	@Override
 	public String toString()
 	{

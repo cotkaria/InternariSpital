@@ -19,6 +19,7 @@ import com.database.internarispital.entities.DiagCategory;
 import com.database.internarispital.entities.Diagnostic;
 import com.database.internarispital.entities.HospitalizationPeriod;
 import com.database.internarispital.entities.accounts.Account;
+import com.database.internarispital.entities.accounts.AccountTypes;
 import com.database.internarispital.entities.doctors.Doctor;
 import com.database.internarispital.entities.doctors.DoctorData;
 import com.database.internarispital.entities.facilities.Bed;
@@ -38,8 +39,9 @@ public class DataBase
 	private static final String USER = "client";
 	private static final String PASSWORD = "conexiune";
 	
-	private static final String INSERT_DOCTOR 			= "INSERT INTO Doctors 			VALUES (?, ?, ?, ?, ?)";
-	private static final String INSERT_PATIENT 			= "INSERT INTO Patients 		VALUES (?, ?, ?)";
+	private static final String INSERT_ACCOUNT			= "INSERT INTO ACCOUNTS 		VALUES (?, ?, ?)";
+	private static final String INSERT_DOCTOR 			= "INSERT INTO Doctors 			VALUES (?, ?, ?, ?, ?, ?)";
+	private static final String INSERT_PATIENT 			= "INSERT INTO Patients 		VALUES (?, ?, ?, ?)";
 	private static final String INSERT_CONSULTATION 	= "INSERT INTO Consultations 	VALUES( ?, ?, ?, ?)";
 	private static final String INSERT_SECTION 			= "INSERT INTO Sections 		VALUES (?)";
 	private static final String INSERT_WARD 			= "INSERT INTO WARDS 			VALUES (?, ?)";
@@ -50,6 +52,7 @@ public class DataBase
 	private SQLServerDataSource mDataSource;
 	private Connection mConnection;
 	private Statement mStatement; 
+	private PreparedStatement mInsertAccountStatement;
 	private PreparedStatement mInsertDoctorStatement;
 	private PreparedStatement mInsertPatientStatement;
 	private PreparedStatement mInsertConsultationStatement;
@@ -95,6 +98,7 @@ public class DataBase
 		mStatement = mConnection.createStatement();
 		mStatementsToClose.add(mStatement);
 		
+		mInsertAccountStatement 		= initStatement(INSERT_ACCOUNT);
 		mInsertDoctorStatement 			= initStatement(INSERT_DOCTOR);
 		mInsertPatientStatement 		= initStatement(INSERT_PATIENT);
 		mInsertConsultationStatement 	= initStatement(INSERT_CONSULTATION);
@@ -193,6 +197,46 @@ public class DataBase
 		return new Account(id, name, password, accountType);
 	}
 	
+	public Account insertAccount(String userName, String password, AccountTypes accountType)
+	{
+		Account account = null;
+		try 
+		{
+			mInsertAccountStatement.setString(1, userName);
+			mInsertAccountStatement.setString(2, password);
+			mInsertAccountStatement.setInt(3, getAccountTypeIndex(accountType));
+
+			int accountId = executeInsertAndGetKey(mInsertAccountStatement);
+			account = new Account(accountId, userName, password, accountType);
+		} 
+		catch (SQLException e) 
+		{
+			e.printStackTrace();
+		}
+		return account;
+	}
+	
+	private int getAccountTypeIndex(AccountTypes accountType)
+	{
+		int accountTypeIndex = INVALID_ID;
+		try
+        {   
+        	String sqlQuery = "SELECT type_Id FROM AccountTypes "
+        			+ "WHERE type_name = '" + accountType.name() + "' ";
+        	ResultSet resultSet = mStatement.executeQuery(sqlQuery);
+        	if(resultSet.next())
+        	{
+        		accountTypeIndex = resultSet.getInt("type_Id");
+        	}
+        }
+        catch(Exception e)
+        {
+        	e.printStackTrace();        	
+        }
+		
+		return accountTypeIndex;
+	}
+	
 	public Doctor insertDoctor(DoctorData doctorData)
 	{
 		Doctor doctor = null;
@@ -203,6 +247,7 @@ public class DataBase
 			mInsertDoctorStatement.setString(3, doctorData.gradeProperty().getValue());
 			mInsertDoctorStatement.setString(4, doctorData.specialityProperty().getValue());
 			mInsertDoctorStatement.setBoolean(5, true);
+			mInsertDoctorStatement.setInt(6, doctorData.getAccountId());
 
 			int doctorId = executeInsertAndGetKey(mInsertDoctorStatement);
 			doctor = new Doctor(doctorId, doctorData);
@@ -287,7 +332,9 @@ public class DataBase
 		String patientName = resultSet.getString("patient_name");
 		String patientSurname = resultSet.getString("patient_surname");
 		String birthDate = resultSet.getString("birth_date");
-		return new Patient(patientId, new PatientData(patientName, patientSurname, birthDate));
+		int accountId = resultSet.getInt("account_Id");
+		PatientData patientData = new PatientData(patientName, patientSurname, birthDate, accountId);
+		return new Patient(patientId, patientData);
 	}
 	
 	public HospitalizedPatient getHospitalizedPatient(Patient patient)
@@ -326,6 +373,7 @@ public class DataBase
 			mInsertPatientStatement.setString(1, patientData.firstNameProperty().getValue());
 			mInsertPatientStatement.setString(2, patientData.lastNameProperty().getValue());
 			mInsertPatientStatement.setString(3, patientData.birthDateProperty().getValue());
+			mInsertPatientStatement.setInt(4, patientData.getAccountId());
 
 			int patientId = executeInsertAndGetKey(mInsertPatientStatement);
 			patient = new Patient(patientId, patientData);
@@ -515,7 +563,8 @@ public class DataBase
 		String doctorSurname = resultSet.getString("doctor_surname");
 		String grade = resultSet.getString("doctor_grade");
 		String speciality = resultSet.getString("speciality_name");
-		return new Doctor(doctorId, new DoctorData(doctorName, doctorSurname, grade, speciality));
+		int accountId = resultSet.getInt("account_Id");
+		return new Doctor(doctorId, new DoctorData(doctorName, doctorSurname, grade, speciality, accountId));
 	}
 	public ObservableList<Section> getSections()
 	{

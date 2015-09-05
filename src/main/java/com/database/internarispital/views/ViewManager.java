@@ -67,7 +67,7 @@ public class ViewManager
 	private static final String DOCTOR_HISTORY_VIEW_PATH 		= DOCTORS_PATH + "DoctorHistoryView.fxml";
 	
 	private static final String ADMIN_PATH 						= LAYOUTS_PATH + "admin/";
-	private static final String EDIT_PATIENTS_VIEW_PATH 		= ADMIN_PATH + "EditPatientsView.fxml";
+	//private static final String EDIT_PATIENTS_VIEW_PATH 		= ADMIN_PATH + "EditPatientsView.fxml";
 	private static final String EDIT_DOCTORS_VIEW_PATH 			= ADMIN_PATH + "EditDoctorsView.fxml";
 	private static final String EDIT_FACILITIES_VIEW_PATH 		= ADMIN_PATH + "EditFacilitiesView.fxml";
 	
@@ -269,7 +269,7 @@ public class ViewManager
 	
 	private static void setTitle(String name)
 	{
-		mStage.setTitle(Main.APP_NAME + " - " + name + " v" + Main.VERSION);
+		mStage.setTitle(name + " - " + Main.APP_NAME + " v" + Main.VERSION);
 	}
 	
 	private static void assertIfNull(Object obj, String message)

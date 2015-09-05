@@ -39,8 +39,8 @@ public class BrowseDoctorsViewController implements Initializable
     
     private void configureDoctorsTable()
     {
-    	nameColumn.setCellValueFactory(new PropertyValueFactory<Doctor, String>("doctorName"));
-    	surnameColumn.setCellValueFactory(new PropertyValueFactory<Doctor, String>("doctorSurname"));
+    	nameColumn.setCellValueFactory(new PropertyValueFactory<Doctor, String>("name"));
+    	surnameColumn.setCellValueFactory(new PropertyValueFactory<Doctor, String>("surname"));
     	gradeColumn.setCellValueFactory(new PropertyValueFactory<Doctor, String>("grade"));
     	specialityColumn.setCellValueFactory(new PropertyValueFactory<Doctor, String>("speciality"));
 	}

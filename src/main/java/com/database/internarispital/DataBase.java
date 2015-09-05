@@ -14,15 +14,16 @@ import java.util.List;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 
-import com.database.internarispital.entities.Bed;
 import com.database.internarispital.entities.Consultation;
 import com.database.internarispital.entities.DiagCategory;
 import com.database.internarispital.entities.Diagnostic;
 import com.database.internarispital.entities.HospitalizationPeriod;
-import com.database.internarispital.entities.Section;
-import com.database.internarispital.entities.Ward;
+import com.database.internarispital.entities.accounts.Account;
 import com.database.internarispital.entities.doctors.Doctor;
 import com.database.internarispital.entities.doctors.DoctorData;
+import com.database.internarispital.entities.facilities.Bed;
+import com.database.internarispital.entities.facilities.Section;
+import com.database.internarispital.entities.facilities.Ward;
 import com.database.internarispital.entities.patients.HospitalizedPatient;
 import com.database.internarispital.entities.patients.Patient;
 import com.database.internarispital.entities.patients.PatientData;
@@ -155,14 +156,50 @@ public class DataBase
     		e.printStackTrace();
     	}
 	}
+
+	public Account login(String userName, String password)
+	{
+		Account account = null;
+		
+		try
+        {   
+        	String sqlQuery = "SELECT * FROM "
+        			+ "Accounts A INNER JOIN AccountTypes AT "
+        			+ "ON A.account_type = AT.type_id "
+        			+ "WHERE A.account_name = '" + userName + "' "
+        			+ "AND "
+        			+ "A.account_password = '" + password + "'";
+        	ResultSet resultSet = mStatement.executeQuery(sqlQuery);
+        	if(resultSet.next())
+        	{
+        		account = parseResultSetForAccount(resultSet);
+        	}
+        }
+        catch(Exception e)
+        {
+        	e.printStackTrace();        	
+        }
+		
+		return account;
+	}
+	
+	private Account parseResultSetForAccount(ResultSet resultSet) throws SQLException
+	{
+		int id = resultSet.getInt("account_Id");
+		String name = resultSet.getString("account_name");
+		String password = resultSet.getString("account_password");
+		String accountType = resultSet.getString("type_name");
+		
+		return new Account(id, name, password, accountType);
+	}
 	
 	public Doctor insertDoctor(DoctorData doctorData)
 	{
 		Doctor doctor = null;
 		try 
 		{
-			mInsertDoctorStatement.setString(1, doctorData.doctorNameProperty().getValue());
-			mInsertDoctorStatement.setString(2, doctorData.doctorSurnameProperty().getValue());
+			mInsertDoctorStatement.setString(1, doctorData.nameProperty().getValue());
+			mInsertDoctorStatement.setString(2, doctorData.surnameProperty().getValue());
 			mInsertDoctorStatement.setString(3, doctorData.gradeProperty().getValue());
 			mInsertDoctorStatement.setString(4, doctorData.specialityProperty().getValue());
 			mInsertDoctorStatement.setBoolean(5, true);
@@ -175,6 +212,19 @@ public class DataBase
 			e.printStackTrace();
 		}
 		return doctor;
+	}
+	
+	public Doctor updateDoctor(Doctor doctor, DoctorData newData)
+	{
+		String update = "UPDATE Doctors "
+				+ "SET doctor_name = '" + newData.nameProperty().getValue() + "' "
+				+ ", doctor_surname = '" + newData.surnameProperty().getValue() + "' "
+				+ ", doctor_grade = '" + newData.gradeProperty().getValue() + "' "
+				+ ", speciality_name = '" + newData.specialityProperty().getValue() + "' "
+				+ "WHERE doctor_Id = " + doctor.doctorIdProperty().getValue();
+		executeUpdate(update);
+		
+		return getDoctor(doctor.doctorIdProperty().getValue());
 	}
 	
 	public ObservableList<Patient> getNotHospitalizedPatients()
@@ -268,7 +318,7 @@ public class DataBase
 		
 		return hospitalizedPatient;
 	}
-	public Patient insertNewPatient(PatientData patientData)
+	public Patient insertPatient(PatientData patientData)
 	{
 		Patient patient = null;
 		try 
@@ -293,17 +343,12 @@ public class DataBase
 		HospitalizedPatient hospitalizedPatient = null;
 		String sqlHospitalize = "INSERT INTO Hospitalizations VALUES ("
 							+ patient.getPatientId() + "," + bedId + ")";
-		try
-		{
-			mStatement.executeUpdate(sqlHospitalize);
-			setBedOccupancy(bedId, true);
+		
+		executeUpdate(sqlHospitalize);
+		setBedOccupancy(bedId, true);
 			
-			hospitalizedPatient = getHospitalizedPatient(patient);
-		}
-		catch (SQLException e)
-		{
-			e.printStackTrace();
-		}
+		hospitalizedPatient = getHospitalizedPatient(patient);
+		
 		return hospitalizedPatient;
 	}
 	
@@ -311,14 +356,7 @@ public class DataBase
 	{
 		String sqlAdmit = "INSERT INTO Hospitalization_Records VALUES("
 						+ patient.getPatientId() + ", '" + getCurrentDate() + "', NULL)";
-		try
-		{
-			mStatement.executeUpdate(sqlAdmit);
-		}
-		catch (SQLException e)
-		{
-			e.printStackTrace();
-		}
+		executeUpdate(sqlAdmit);
 	}
 	private String getCurrentDate()
 	{
@@ -375,14 +413,7 @@ public class DataBase
 	private void setBedOccupancy(int bedId, boolean occupancyStatus)
 	{
 		String sqlUpdate = "UPDATE Beds SET occupancy = '" + occupancyStatus + "' WHERE bed_Id = " + bedId;
-		try
-		{
-			mStatement.executeUpdate(sqlUpdate);
-		}
-		catch (SQLException e) 
-		{
-			e.printStackTrace();
-		}
+		executeUpdate(sqlUpdate);
 	}
 	public ObservableList<Bed> getVacantBeds(int wardId)
 	{
@@ -437,6 +468,25 @@ public class DataBase
 			e.printStackTrace();
 		}
 		return wardsList;
+	}
+	
+	public Doctor getDoctor(int doctorId)
+	{
+		Doctor doctor = null;
+		String sqlQuery = "SELECT * FROM Doctors WHERE doctor_Id = " + doctorId;
+		try
+		{
+			ResultSet resultSet = mStatement.executeQuery(sqlQuery);
+			if(resultSet.next())
+			{
+				doctor = parseResultSetForDoctor(resultSet);
+			}
+		}
+		catch (SQLException e)
+		{
+			e.printStackTrace();
+		}		
+		return doctor;
 	}
 	
 	public ObservableList<Doctor> getDoctors()

@@ -31,7 +31,7 @@ public class Main extends Application
 		if(initDatabase())
 		{
 			configureManagers();
-			ViewManager.showMainView();
+			ViewManager.showLoginView();
 		}
 		else
 		{

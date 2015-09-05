@@ -1,8 +1,8 @@
 package com.database.internarispital.views.facilities;
 
-import com.database.internarispital.entities.Bed;
-import com.database.internarispital.entities.Section;
-import com.database.internarispital.entities.Ward;
+import com.database.internarispital.entities.facilities.Bed;
+import com.database.internarispital.entities.facilities.Section;
+import com.database.internarispital.entities.facilities.Ward;
 
 public interface IEditFacilitiesViewModel
 {

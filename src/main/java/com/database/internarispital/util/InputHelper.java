@@ -10,4 +10,10 @@ public class InputHelper
 		final boolean isDoubleClick = event.getClickCount() == 2 && event.getButton().equals(MouseButton.PRIMARY);
 		return isDoubleClick;
 	}
+	
+	public static boolean isLeftClick(MouseEvent event)
+	{
+		final boolean isClick = event.getClickCount() == 1 && event.getButton().equals(MouseButton.PRIMARY);
+		return isClick;
+	}
 }

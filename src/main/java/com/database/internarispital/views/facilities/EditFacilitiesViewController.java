@@ -3,12 +3,13 @@ package com.database.internarispital.views.facilities;
 import java.net.URL;
 import java.util.ResourceBundle;
 
-import com.database.internarispital.entities.Bed;
-import com.database.internarispital.entities.Section;
-import com.database.internarispital.entities.Ward;
+import com.database.internarispital.entities.facilities.Bed;
+import com.database.internarispital.entities.facilities.Section;
+import com.database.internarispital.entities.facilities.Ward;
 import com.database.internarispital.exceptions.InvalidInputException;
 import com.database.internarispital.exceptions.MissingSelectionException;
 import com.database.internarispital.util.DialogHelper;
+import com.database.internarispital.views.patients.common.PatientsHelper;
 
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
@@ -93,7 +94,7 @@ public class EditFacilitiesViewController implements Initializable
 		{
 			int wardNumber = getTextAsInt(wardNumberTF);
 			wardNumberTF.clear();
-			mViewModel.addWard(getSelectedItem(sectionsCB), wardNumber);
+			mViewModel.addWard(PatientsHelper.getSelectedItem(sectionsCB), wardNumber);
 		}
 		catch (InvalidInputException e)
 		{
@@ -111,7 +112,7 @@ public class EditFacilitiesViewController implements Initializable
 		{
 			int bedNumber = getTextAsInt(bedNumberTF);
 			bedNumberTF.clear();
-			mViewModel.addBed(getSelectedItem(wardsCB), bedNumber);
+			mViewModel.addBed(PatientsHelper.getSelectedItem(wardsCB), bedNumber);
 		}
 		catch (InvalidInputException e)
 		{
@@ -127,7 +128,7 @@ public class EditFacilitiesViewController implements Initializable
 	{
 		try
 		{
-			mViewModel.removeSection(getSelectedItem(sectionsCB));
+			mViewModel.removeSection(PatientsHelper.getSelectedItem(sectionsCB));
 		}
 		catch(MissingSelectionException ex)
 		{
@@ -138,7 +139,7 @@ public class EditFacilitiesViewController implements Initializable
 	{
 		try
 		{
-			mViewModel.removeWard(getSelectedItem(wardsCB));
+			mViewModel.removeWard(PatientsHelper.getSelectedItem(wardsCB));
 		}
 		catch(MissingSelectionException ex)
 		{
@@ -149,7 +150,7 @@ public class EditFacilitiesViewController implements Initializable
 	{
 		try
 		{
-			mViewModel.removeBed(getSelectedItem(bedsCB));
+			mViewModel.removeBed(PatientsHelper.getSelectedItem(bedsCB));
 		}
 		catch(MissingSelectionException ex)
 		{
@@ -164,22 +165,19 @@ public class EditFacilitiesViewController implements Initializable
 
 	public void setSections(ObservableList<Section> sections)
     {
-		clearAndSetItems(sectionsCB, sections);
-		selectFirstItem(sectionsCB);
+		PatientsHelper.setAndSelectFirst(sectionsCB, sections);
 		onSectionSelected();
     }
 	
 	public void setWards(ObservableList<Ward> wards)
     {
-		clearAndSetItems(wardsCB, wards);
-		selectFirstItem(wardsCB);
+		PatientsHelper.setAndSelectFirst(wardsCB, wards);
 		onWardSelected();
     }
 	
     public void setBeds(ObservableList<Bed> beds)
     {
-		clearAndSetItems(bedsCB, beds);
-		selectFirstItem(bedsCB);
+    	PatientsHelper.setAndSelectFirst(bedsCB, beds);
     }
     
 	private void onSectionSelected()
@@ -218,21 +216,6 @@ public class EditFacilitiesViewController implements Initializable
 		return -1;
 	}
 	
-	private <T> T getSelectedItem(ComboBox<T> cb) throws MissingSelectionException
-	{
-		T selectedItem = null;
-		SingleSelectionModel<T> selectionModel = cb.getSelectionModel();
-		if(selectionModel.isEmpty() == false)
-		{
-			selectedItem = selectionModel.getSelectedItem();
-		}
-		else
-		{
-			throw new MissingSelectionException("No selection is made in " + cb.toString());
-		}
-		return selectedItem;
-	}
-	
 	private int getTextAsInt(TextField tf) throws InvalidInputException
 	{
 		int intValue = 0;
@@ -245,20 +228,5 @@ public class EditFacilitiesViewController implements Initializable
 			throw new InvalidInputException(ex.getMessage());
 		}
 		return intValue;
-	}
-	
-	private <T> void clearAndSetItems(ComboBox<T> cb, ObservableList<T> items)
-	{
-		cb.getItems().clear();
-		cb.setItems(items);
-	}
-	
-	private <T> void selectFirstItem(ComboBox<T> cb)
-	{
-		ObservableList<T> items = cb.getItems();
-		if(items.isEmpty() == false)
-		{
-			cb.getSelectionModel().select(0);
-		}
 	}
 }

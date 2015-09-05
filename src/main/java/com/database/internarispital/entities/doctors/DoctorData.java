@@ -21,11 +21,11 @@ public class DoctorData
 	{
 		this(data.mDoctorName.getValue(), data.mDoctorSurname.getValue(), data.mGrade.getValue(), data.mSpeciality.getValue());
 	}
-	public StringProperty doctorNameProperty()
+	public StringProperty nameProperty()
 	{
 		return mDoctorName;
 	}
-	public StringProperty doctorSurnameProperty()
+	public StringProperty surnameProperty()
 	{
 		return mDoctorSurname;
 	}
@@ -46,5 +46,23 @@ public class DoctorData
 	public String toString()
 	{
 		return mDoctorName.getValue() + " " + mDoctorSurname.getValue() + ", " + mSpeciality.getValue();
+	}
+	
+	@Override
+	public boolean equals(Object obj)
+	{
+		boolean areEqual = true;
+		if(obj != this)
+		{
+			if(obj instanceof DoctorData)
+			{
+				DoctorData other = (DoctorData)obj;
+				areEqual = (areEqual && mDoctorName.equals(other.mDoctorName));
+				areEqual = (areEqual && mDoctorSurname.equals(other.mDoctorSurname));
+				areEqual = (areEqual && mGrade.equals(other.mGrade));
+				areEqual = (areEqual && mSpeciality.equals(other.mSpeciality));
+			}
+		}
+		return areEqual;
 	}
 }

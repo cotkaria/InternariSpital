@@ -12,8 +12,8 @@
             <Label layoutY="4.0" text="First Name" />
             <TextField fx:id="firstNameTF" layoutX="67.0" prefHeight="25.0" prefWidth="174.0" promptText="Insert first name" />
             <TextField fx:id="lastNameTF" layoutX="67.0" layoutY="33.0" prefHeight="25.0" prefWidth="174.0" promptText="Insert last name" />
-            <Label layoutX="2.0" layoutY="73.0" text="Birth Date" />
             <DatePicker fx:id="birthDatePicker" layoutX="67.0" layoutY="69.0" promptText="Insert birth date" />
+            <Label layoutX="2.0" layoutY="73.0" text="Birth Date" />
          </children>
       </AnchorPane>
       <Button fx:id="createPatientButton" layoutX="143.0" layoutY="175.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="174.0" text="Create patient" />

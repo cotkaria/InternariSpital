@@ -27,7 +27,7 @@ public class CreatePatientViewModel implements ICreatePatientViewModel
 	@Override
 	public void createPatient(PatientData patientData)
 	{
-		Patient patient = mDataBase.insertNewPatient(patientData);
+		Patient patient = mDataBase.insertPatient(patientData);
 		if(mOnPatientCreateCB != null)
 		{
 			mOnPatientCreateCB.call(patient);

@@ -7,11 +7,7 @@ import java.util.ResourceBundle;
 
 import com.database.internarispital.entities.Consultation;
 import com.database.internarispital.entities.Diagnostic;
-import com.database.internarispital.entities.patients.HospitalizedPatient;
 import com.database.internarispital.entities.patients.Patient;
-import com.database.internarispital.exceptions.MissingSelectionException;
-import com.database.internarispital.util.InputHelper;
-import com.database.internarispital.views.ViewManager;
 import com.database.internarispital.views.doctors.common.DoctorsHelper;
 
 import javafx.beans.property.SimpleStringProperty;
@@ -23,7 +19,6 @@ import javafx.scene.control.CheckBox;
 import javafx.scene.control.DatePicker;
 import javafx.scene.control.Label;
 import javafx.scene.control.RadioButton;
-import javafx.scene.control.SelectionModel;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TableColumn.CellDataFeatures;

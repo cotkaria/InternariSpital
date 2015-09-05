@@ -3,9 +3,9 @@ package com.database.internarispital.views.patients.hospitalize;
 import java.net.URL;
 import java.util.ResourceBundle;
 
-import com.database.internarispital.entities.Bed;
-import com.database.internarispital.entities.Section;
-import com.database.internarispital.entities.Ward;
+import com.database.internarispital.entities.facilities.Bed;
+import com.database.internarispital.entities.facilities.Section;
+import com.database.internarispital.entities.facilities.Ward;
 import com.database.internarispital.entities.patients.HospitalizedPatient;
 import com.database.internarispital.entities.patients.Patient;
 import com.database.internarispital.exceptions.MissingSelectionException;
@@ -224,15 +224,20 @@ public class PatientsViewController implements Initializable
 	
 	public void setSections(ObservableList<Section> sections)
 	{
-		sectionsList.setItems(sections);
-	}
-	private void onSectionSelected()
-	{
-		mPatientsViewModel.selectSection(sectionsList.getSelectionModel().getSelectedItem());
+		PatientsHelper.setAndSelectFirst(sectionsList, sections);
 	}
 	public void setWards(ObservableList<Ward> wards)
 	{
-		wardsList.setItems(wards);
+		PatientsHelper.setAndSelectFirst(wardsList, wards);
+	}
+	public void setBeds(ObservableList<Bed> beds)
+	{
+		PatientsHelper.setAndSelectFirst(bedsList, beds);
+	}
+	
+	private void onSectionSelected()
+	{
+		mPatientsViewModel.selectSection(sectionsList.getSelectionModel().getSelectedItem());
 	}
 	
 	public int getSelectedWardId()
@@ -256,10 +261,5 @@ public class PatientsViewController implements Initializable
 		{
 			bedsList.getItems().clear();
 		}   
-	}
-	
-	public void setBeds(ObservableList<Bed> beds)
-	{
-		bedsList.setItems(beds);
 	}
 }

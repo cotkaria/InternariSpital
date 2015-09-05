@@ -1,9 +1,9 @@
 package com.database.internarispital.views.patients.hospitalize;
 
 import com.database.internarispital.DataBase;
-import com.database.internarispital.entities.Bed;
-import com.database.internarispital.entities.Section;
-import com.database.internarispital.entities.Ward;
+import com.database.internarispital.entities.facilities.Bed;
+import com.database.internarispital.entities.facilities.Section;
+import com.database.internarispital.entities.facilities.Ward;
 import com.database.internarispital.entities.patients.HospitalizedPatient;
 import com.database.internarispital.entities.patients.Patient;
 import com.database.internarispital.views.ViewManager;

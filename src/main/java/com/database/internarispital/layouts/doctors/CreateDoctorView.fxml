@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.*?>
+<?import javafx.scene.control.*?>
+<?import java.lang.*?>
+<?import javafx.scene.layout.*?>
+
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.database.internarispital.views.doctors.create.CreateDoctorViewController">
+   <children>
+      <Group fx:id="addPatientGroup" layoutX="-534.0" layoutY="-57.0">
+         <children>
+            <Label layoutX="566.0" layoutY="109.0" text="Name" />
+            <Label layoutX="566.0" layoutY="187.0" text="Speciality" />
+            <Label layoutX="566.0" layoutY="150.0" text="Surname" />
+            <Label layoutX="565.0" layoutY="231.0" text="Medical Grade" />
+            <TextField fx:id="doctorNameTF" layoutX="699.0" layoutY="110.0" prefHeight="25.0" prefWidth="174.0" promptText="Provide a Name" text="Name" />
+            <TextField fx:id="doctorSurnameTF" layoutX="699.0" layoutY="151.0" prefHeight="25.0" prefWidth="174.0" promptText="Provide a Surname" text="Surname" />
+            <ComboBox fx:id="specialtyCB" layoutX="699.0" layoutY="188.0" prefHeight="25.0" prefWidth="174.0" promptText="Select Speciality" />
+            <ComboBox fx:id="gradeCB" layoutX="699.0" layoutY="227.0" prefHeight="25.0" prefWidth="174.0" promptText="Select Grade" />
+            <Button fx:id="addDoctorBT" layoutX="699.0" layoutY="324.0" mnemonicParsing="false" text="Add" />
+         </children>
+      </Group>
+   </children>
+</AnchorPane>

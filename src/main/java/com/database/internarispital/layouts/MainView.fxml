@@ -6,9 +6,9 @@
 <?import java.lang.*?>
 <?import javafx.scene.layout.*?>
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="820.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.database.internarispital.views.mainlobby.MainLobbyViewController">
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="900.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.database.internarispital.views.mainlobby.MainLobbyViewController">
    <children>
-      <GridPane alignment="CENTER_RIGHT" layoutX="90.0" layoutY="130.0" maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="180.0" prefWidth="640.0">
+      <GridPane alignment="CENTER_RIGHT" layoutX="130.0" layoutY="180.0" maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="180.0" prefWidth="640.0">
         <columnConstraints>
           <ColumnConstraints hgrow="ALWAYS" minWidth="10.0" prefWidth="100.0" />
           <ColumnConstraints hgrow="ALWAYS" minWidth="10.0" prefWidth="100.0" />
@@ -52,7 +52,7 @@
             <Font name="System Bold" size="18.0" />
          </font>
       </Label>
-      <Label layoutX="91.0" layoutY="94.0" text="Please select one of the lobbies below:">
+      <Label layoutX="130.0" layoutY="138.0" text="Please select one of the lobbies below:">
          <font>
             <Font size="15.0" />
          </font>

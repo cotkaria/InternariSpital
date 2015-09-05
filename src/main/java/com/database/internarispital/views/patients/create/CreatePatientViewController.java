@@ -7,6 +7,7 @@ import java.util.ResourceBundle;
 import com.database.internarispital.entities.patients.PatientData;
 import com.database.internarispital.exceptions.MissingInputException;
 import com.database.internarispital.util.DialogHelper;
+import com.database.internarispital.views.common.CommonHelper;
 
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -59,25 +60,16 @@ public class CreatePatientViewController implements Initializable
 	
 	private String getFirstName() throws MissingInputException
 	{
-		return getTextOrException(firstNameTF.getText(), "Please provide a name for the patient.");
+		return CommonHelper.getTextOrException(firstNameTF.getText(), "Please provide a name for the patient.");
 	}
 	
 	private String getLastName() throws MissingInputException
 	{
-		return getTextOrException(lastNameTF.getText(), "Please provide a surname for the patient.");
+		return CommonHelper.getTextOrException(lastNameTF.getText(), "Please provide a surname for the patient.");
 	}
 	
 	private String getBirthDate() throws MissingInputException
 	{
-		return getTextOrException(birthDatePicker.getValue().toString(), "Please provide a birth date for the patient.");
-	}
-	
-	private String getTextOrException(String text, String errorMessage) throws MissingInputException
-	{
-		if(text.isEmpty())
-		{
-			throw new MissingInputException(errorMessage);
-		}
-		return text;
+		return CommonHelper.getTextOrException(birthDatePicker.getValue().toString(), "Please provide a birth date for the patient.");
 	}
 }

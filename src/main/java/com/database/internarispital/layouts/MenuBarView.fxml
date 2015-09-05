@@ -9,19 +9,19 @@
     <Menu mnemonicParsing="false" text="Navigation">
       <items>
             <MenuItem fx:id="mainLobby" mnemonicParsing="false" text="Main Lobby" />
-            <Menu mnemonicParsing="false" text="Patients Lobby">
+            <Menu fx:id="patientsLobby" mnemonicParsing="false" text="Patients Lobby">
               <items>
                 <MenuItem fx:id="browsePatients" mnemonicParsing="false" text="Browse" />
                   <MenuItem fx:id="hospitalizePatients" mnemonicParsing="false" text="Hospitalize" />
               </items>
             </Menu>
-            <Menu mnemonicParsing="false" text="Doctors Lobby">
+            <Menu fx:id="doctorsLobby" mnemonicParsing="false" text="Doctors Lobby">
               <items>
                   <MenuItem fx:id="browseDoctors" mnemonicParsing="false" text="Browse" />
                 <MenuItem fx:id="diagnosticationView" mnemonicParsing="false" text="Diagnosticate" />
               </items>
             </Menu>
-            <Menu mnemonicParsing="false" text="Administration Lobby">
+            <Menu fx:id="adminLobby" mnemonicParsing="false" text="Administration Lobby">
               <items>
                 <MenuItem fx:id="editsPatientsView" mnemonicParsing="false" text="Edit Patients" />
                   <MenuItem fx:id="editsDoctorsView" mnemonicParsing="false" text="Edit Doctors" />
@@ -30,10 +30,10 @@
             </Menu>
       </items>
     </Menu>
-    <Menu mnemonicParsing="false" text="Help">
-      <items>
-        <MenuItem mnemonicParsing="false" text="About" />
-      </items>
-    </Menu>
+      <Menu fx:id="loginNameMenu" mnemonicParsing="false" text="Logged in as: John Hopkins, Admin">
+         <items>
+            <MenuItem fx:id="logOutButton" mnemonicParsing="false" text="Log out" />
+         </items>
+      </Menu>
   </menus>
 </MenuBar>

@@ -11,6 +11,8 @@ import com.database.internarispital.entities.patients.Patient;
 import com.database.internarispital.util.ControllerRootPair;
 import com.database.internarispital.views.doctors.browse.BrowseDoctorsViewController;
 import com.database.internarispital.views.doctors.browse.BrowseDoctorsViewModel;
+import com.database.internarispital.views.doctors.create.CreateDoctorViewController;
+import com.database.internarispital.views.doctors.create.CreateDoctorViewModel;
 import com.database.internarispital.views.doctors.diagnosticate.DoctorsViewController;
 import com.database.internarispital.views.doctors.diagnosticate.DoctorsViewModel;
 import com.database.internarispital.views.doctors.edit.EditDoctorsViewController;
@@ -19,6 +21,8 @@ import com.database.internarispital.views.doctors.history.DoctorHistoryViewContr
 import com.database.internarispital.views.doctors.history.DoctorHistoryViewModel;
 import com.database.internarispital.views.facilities.EditFacilitiesViewController;
 import com.database.internarispital.views.facilities.EditFacilitiesViewModel;
+import com.database.internarispital.views.login.LoginViewController;
+import com.database.internarispital.views.login.LoginViewModel;
 import com.database.internarispital.views.mainlobby.MainLobbyViewController;
 import com.database.internarispital.views.mainlobby.MainLobbyViewModel;
 import com.database.internarispital.views.menuBar.MenuBarViewController;
@@ -57,6 +61,7 @@ public class ViewManager
 	private static final String RECORDS_VIEW_PATH 				= PATIENTS_PATH + "RecordsView.fxml";
 
 	private static final String DOCTORS_PATH 					= LAYOUTS_PATH + "doctors/";
+	private static final String CREATE_DOCTOR_VIEW_PATH 		= DOCTORS_PATH + "CreateDoctorView.fxml";
 	private static final String CONSULTATIONS_VIEW_PATH 		= DOCTORS_PATH + "ConsultationsView.fxml";
 	private static final String BROWSE_DOCTORS_VIEW_PATH 		= DOCTORS_PATH + "BrowseDoctorsView.fxml";
 	private static final String DOCTOR_HISTORY_VIEW_PATH 		= DOCTORS_PATH + "DoctorHistoryView.fxml";
@@ -65,6 +70,9 @@ public class ViewManager
 	private static final String EDIT_PATIENTS_VIEW_PATH 		= ADMIN_PATH + "EditPatientsView.fxml";
 	private static final String EDIT_DOCTORS_VIEW_PATH 			= ADMIN_PATH + "EditDoctorsView.fxml";
 	private static final String EDIT_FACILITIES_VIEW_PATH 		= ADMIN_PATH + "EditFacilitiesView.fxml";
+	
+	private static final String LOGIN_PATH 						= LAYOUTS_PATH + "login/";
+	private static final String LOGIN_VIEW_PATH 				= LOGIN_PATH + "LoginView.fxml";
 	
 	private static Stage mStage;
 	private static Scene mScene;
@@ -100,6 +108,20 @@ public class ViewManager
 		MenuBar menuBar = viewController.getMenuBar();
 		menuBar.prefWidthProperty().bind(mStage.widthProperty());
 		mViewLayoutY = menuBar.getPrefHeight();
+	}
+
+	public static void showLoginView()
+	{
+		setTitle("Login view");
+		LoginViewController viewController = (LoginViewController)loadView(LOGIN_VIEW_PATH);
+		new LoginViewModel(viewController, mDataBase);
+	}
+	
+	public static void showMainView()
+	{
+		setTitle("Main Lobby");
+		MainLobbyViewController viewController = (MainLobbyViewController)loadView(MAIN_VIEW_PATH);
+		new MainLobbyViewModel(viewController);
 	}
 	
 	public static void showHospitalizePatientsView()
@@ -170,11 +192,13 @@ public class ViewManager
 		return controllerRoot.getController();
 	}
 	
-	public static void showMainView()
+	public static void showCreateDoctorView(Callback<Doctor, Void> onDoctorCreatedCB)
 	{
-		setTitle("Main Lobby");
-		MainLobbyViewController viewController = (MainLobbyViewController)loadScene(MAIN_VIEW_PATH, mStage);
-		new MainLobbyViewModel(viewController);
+		final Stage stage = new Stage();
+		stage.setTitle("Create a new doctor");
+		stage.setResizable(false);
+		CreateDoctorViewController viewController = (CreateDoctorViewController)loadScene(CREATE_DOCTOR_VIEW_PATH, stage);
+		new CreateDoctorViewModel(viewController, mDataBase, stage, onDoctorCreatedCB);
 	}
 	
 	public static void showDoctorHistory(Doctor doctor)
@@ -198,10 +222,10 @@ public class ViewManager
 	public static void showCreatePatientView(Callback<Patient, Void> onPatientCreatedCB)
 	{
 		final Stage stage = new Stage();
-		stage.setTitle("Create a new patient.");
+		stage.setTitle("Create a new patient");
 		stage.setResizable(false);
-		CreatePatientViewController recordsViewController = (CreatePatientViewController)loadScene(CREATE_PATIENT_VIEW_PATH, stage);
-		new CreatePatientViewModel(recordsViewController, mDataBase, stage, onPatientCreatedCB);
+		CreatePatientViewController viewController = (CreatePatientViewController)loadScene(CREATE_PATIENT_VIEW_PATH, stage);
+		new CreatePatientViewModel(viewController, mDataBase, stage, onPatientCreatedCB);
 	}
 	
 	private static Object loadScene(String scenePath, Stage stage)

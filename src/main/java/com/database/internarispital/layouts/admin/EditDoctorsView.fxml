@@ -5,12 +5,11 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
-<Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="592.0" prefWidth="908.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.database.internarispital.views.doctors.edit.EditDoctorsViewController">
+<Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="900.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.database.internarispital.views.doctors.edit.EditDoctorsViewController">
    <children>
       <Group>
          <children>
-            <Button fx:id="removeButton" layoutX="116.0" layoutY="536.0" mnemonicParsing="false" text="Remove" />
-            <TableView fx:id="doctorsTable" layoutX="116.0" layoutY="100.0" prefHeight="422.0" prefWidth="382.0">
+            <TableView fx:id="doctorsTable" layoutX="37.0" layoutY="77.0" prefHeight="450.0" prefWidth="497.0">
               <columns>
                 <TableColumn fx:id="nameColumn" prefWidth="75.0" text="Name" />
                 <TableColumn fx:id="surnameColumn" prefWidth="100.0" text="Surname" />
@@ -21,19 +20,21 @@
                   <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
                </columnResizePolicy>
             </TableView>
+            <Button fx:id="addDoctorButton" layoutX="38.0" layoutY="539.0" mnemonicParsing="false" text="Create new doctor" />
+            <Button fx:id="removeButton" layoutX="475.0" layoutY="539.0" mnemonicParsing="false" text="Remove" />
          </children>
       </Group>
-      <Group fx:id="addPatientGroup">
+      <Group fx:id="addPatientGroup" layoutX="-11.0">
          <children>
             <Label layoutX="566.0" layoutY="109.0" text="Name" />
             <Label layoutX="566.0" layoutY="187.0" text="Speciality" />
             <Label layoutX="566.0" layoutY="150.0" text="Surname" />
-            <TextField fx:id="doctorSurnameTF" layoutX="699.0" layoutY="151.0" prefHeight="25.0" prefWidth="174.0" promptText="Provide a Surname" />
             <Label layoutX="565.0" layoutY="231.0" text="Medical Grade" />
             <TextField fx:id="doctorNameTF" layoutX="699.0" layoutY="110.0" prefHeight="25.0" prefWidth="174.0" promptText="Provide a Name" />
+            <TextField fx:id="doctorSurnameTF" layoutX="699.0" layoutY="151.0" prefHeight="25.0" prefWidth="174.0" promptText="Provide a Surname" />
             <ComboBox fx:id="specialtyCB" layoutX="699.0" layoutY="188.0" prefHeight="25.0" prefWidth="174.0" promptText="Select Speciality" />
             <ComboBox fx:id="gradeCB" layoutX="699.0" layoutY="227.0" prefHeight="25.0" prefWidth="174.0" promptText="Select Grade" />
-            <Button fx:id="addDoctorBT" layoutX="699.0" layoutY="324.0" mnemonicParsing="false" text="Add" />
+            <Button fx:id="updateDoctorButton" layoutX="699.0" layoutY="275.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="173.0" text="Update Doctor" />
          </children>
       </Group>
    </children>

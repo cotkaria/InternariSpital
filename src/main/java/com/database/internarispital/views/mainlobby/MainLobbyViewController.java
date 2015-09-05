@@ -27,7 +27,7 @@ public class MainLobbyViewController implements Initializable
 	{
 		goToPatientsLobbyButton.setOnAction(event -> ViewManager.showHospitalizePatientsView());
 		goToDoctorsLobbyButton.setOnAction(event -> ViewManager.showConsultationView());
-		goToAdministrationLobbyButton.setOnAction(event -> ViewManager.showEditFacilitiesView());
+		goToAdministrationLobbyButton.setOnAction(event -> ViewManager.showEditDoctorsView());
 	}
 	
 	public void setViewModel(IMainLobbyViewModel viewModel)

@@ -5,9 +5,9 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
-<Pane fx:id="root" prefHeight="626.0" prefWidth="913.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.database.internarispital.views.patients.hospitalize.PatientsViewController">
+<Pane fx:id="root" prefHeight="600.0" prefWidth="900.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.database.internarispital.views.patients.hospitalize.PatientsViewController">
    <children>
-      <TableView fx:id="hospitalizedPatientsTable" layoutX="29.0" layoutY="56.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="478.0">
+      <TableView fx:id="hospitalizedPatientsTable" layoutX="29.0" layoutY="56.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="472.0" prefWidth="534.0">
         <columns>
           <TableColumn fx:id="firstNameColumn" prefWidth="75.0" text="First Name" />
           <TableColumn fx:id="lastNameColumn" prefWidth="75.0" text="Last Name" />
@@ -24,17 +24,17 @@
          <children>
             <Label alignment="CENTER" layoutX="211.0" layoutY="4.0" prefHeight="17.0" prefWidth="31.0" text="OR" textAlignment="RIGHT" />
             <Button fx:id="createPatientButton" mnemonicParsing="false" prefHeight="25.0" prefWidth="211.0" text="Create a new patient" />
-            <Label alignment="CENTER_RIGHT" layoutY="119.0" prefHeight="17.0" prefWidth="39.0" text="Ward" />
-            <Button fx:id="insertButton" layoutX="53.0" layoutY="195.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="193.0" text="Hospitalize" />
-            <ComboBox fx:id="sectionsList" layoutX="53.0" layoutY="79.0" prefHeight="25.0" prefWidth="193.0" promptText="Select section" />
-            <Label alignment="CENTER_RIGHT" layoutX="1.0" layoutY="158.0" prefHeight="17.0" prefWidth="39.0" text="Bed" />
-            <ComboBox fx:id="wardsList" layoutX="53.0" layoutY="115.0" prefHeight="25.0" prefWidth="193.0" promptText="Select ward" />
-            <Label alignment="CENTER_RIGHT" layoutY="83.0" text="Section" />
             <ComboBox fx:id="notHospitalizedPatientsCB" layoutY="36.0" prefHeight="25.0" prefWidth="246.0" promptText="Select an existing patient" />
+            <ComboBox fx:id="sectionsList" layoutX="53.0" layoutY="79.0" prefHeight="25.0" prefWidth="193.0" promptText="Select section" />
+            <ComboBox fx:id="wardsList" layoutX="53.0" layoutY="115.0" prefHeight="25.0" prefWidth="193.0" promptText="Select ward" />
             <ComboBox fx:id="bedsList" layoutX="53.0" layoutY="154.0" prefHeight="25.0" prefWidth="193.0" promptText="Select bed" />
+            <Button fx:id="insertButton" layoutX="53.0" layoutY="195.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="193.0" text="Hospitalize" />
+            <Label alignment="CENTER_RIGHT" layoutY="83.0" text="Section" />
+            <Label alignment="CENTER_RIGHT" layoutY="119.0" prefHeight="17.0" prefWidth="39.0" text="Ward" />
+            <Label alignment="CENTER_RIGHT" layoutX="-1.0" layoutY="158.0" prefHeight="17.0" prefWidth="39.0" text="Bed" />
          </children>
       </AnchorPane>
-      <Button fx:id="dischargeButton" layoutX="29.0" layoutY="472.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="165.0" text="Discharge selected patient" />
+      <Button fx:id="dischargeButton" layoutX="29.0" layoutY="544.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="165.0" text="Discharge selected patient" />
       <Label layoutX="29.0" layoutY="31.0" text="Hospitalized Patients">
          <font>
             <Font name="System Bold" size="12.0" />

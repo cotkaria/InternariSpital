@@ -80,6 +80,7 @@ public class RecordsViewController implements Initializable
 	public void setHospitalizationPeriods(ObservableList<HospitalizationPeriod> hospitalizations)
 	{
 		hospitalizationPeriods.setItems(hospitalizations);
+		hospitalizationPeriods.getSelectionModel().select(0);
 	}
 	
 	public void setConsultations(ObservableList<Consultation> consultations)

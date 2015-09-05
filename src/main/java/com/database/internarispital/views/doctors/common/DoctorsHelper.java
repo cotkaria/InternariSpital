@@ -8,11 +8,16 @@ import com.database.internarispital.exceptions.MissingSelectionException;
 import com.database.internarispital.views.ViewManager;
 import com.database.internarispital.util.InputHelper;
 
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.scene.control.SelectionModel;
 import javafx.scene.control.TableView;
 
 public class DoctorsHelper
 {
+	public static ObservableList<String> DOCTOR_SPECIALITIES = FXCollections.observableArrayList("A", "B", "C");
+	public static ObservableList<String> DOCTOR_GRADES = FXCollections.observableArrayList("Dr", "As", "Rez");
+	
 	public static void showPatientsRecordOnDoubleClick(TableView<Consultation> tableView)
 	{
 		tableView.setOnMouseClicked(event->

@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.text.*?>
+<?import javafx.scene.control.*?>
+<?import java.lang.*?>
+<?import javafx.scene.layout.*?>
+
+
+<Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="900.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.database.internarispital.views.login.LoginViewController">
+   <children>
+      <Label layoutX="140.0" layoutY="202.0" text="User name" />
+      <Label layoutX="140.0" layoutY="152.0" text="Please input your credentials">
+         <font>
+            <Font name="System Bold" size="14.0" />
+         </font>
+      </Label>
+      <Label layoutX="140.0" layoutY="240.0" text="Password" />
+      <TextField fx:id="userNameTF" layoutX="252.0" layoutY="198.0" prefHeight="25.0" prefWidth="258.0" />
+      <PasswordField fx:id="passwordTF" layoutX="252.0" layoutY="236.0" prefHeight="25.0" prefWidth="258.0" />
+      <Button fx:id="loginButon" layoutX="252.0" layoutY="276.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="63.0" text="Login" />
+   </children>
+</Pane>

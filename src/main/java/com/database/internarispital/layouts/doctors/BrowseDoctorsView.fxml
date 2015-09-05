@@ -5,10 +5,9 @@
 <?import java.lang.*?>
 <?import javafx.scene.layout.*?>
 
-
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="513.0" prefWidth="632.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.database.internarispital.views.doctors.browse.BrowseDoctorsViewController">
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="900.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.database.internarispital.views.doctors.browse.BrowseDoctorsViewController">
    <children>
-      <TableView fx:id="tableView" layoutX="36.0" layoutY="72.0" prefHeight="353.0" prefWidth="551.0">
+      <TableView fx:id="tableView" layoutX="36.0" layoutY="72.0" prefHeight="442.0" prefWidth="810.0">
          <columnResizePolicy>
             <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
          </columnResizePolicy>
@@ -24,6 +23,6 @@
             <Font size="14.0" />
          </font>
       </Label>
-      <Label layoutX="36.0" layoutY="439.0" text="Tip: Double-click on a doctor to view its history." />
+      <Label layoutX="36.0" layoutY="531.0" text="Tip: Double-click on a doctor to view its history." />
    </children>
 </AnchorPane>

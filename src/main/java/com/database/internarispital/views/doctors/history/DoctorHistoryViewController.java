@@ -12,6 +12,7 @@ import com.database.internarispital.entities.patients.Patient;
 import com.database.internarispital.exceptions.MissingSelectionException;
 import com.database.internarispital.util.InputHelper;
 import com.database.internarispital.views.ViewManager;
+import com.database.internarispital.views.doctors.common.DoctorsHelper;
 
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.value.ObservableValue;
@@ -69,75 +70,37 @@ public class DoctorHistoryViewController  implements Initializable
 	private IDoctorHistoryViewModel mViewModel;
 	private boolean showAllHistory;
 	
-	@Override
-	public void initialize(URL arg0, ResourceBundle arg1) 
-	{
-		configureHistoryTable();
-		startPeriod.setValue(LocalDate.now());
-		startPeriod.setOnAction(event -> onHistoryIntervalChanged());
-		endPeriod.setValue(LocalDate.now());
-		endPeriod.setOnAction(event -> onHistoryIntervalChanged());
-		consultationTable.setOnMouseClicked(event->
-    	{
-    		if (InputHelper.isDoubleClick(event))
-    		{
-    			try
-    			{
-					showPatientsRecord(getSelectedPatient());
-				}
-    			catch (MissingSelectionException e) 
-    			{
-    				// Is fine if no selection was made
-				}
-    		}
-    	});		
-		radioGroup.selectedToggleProperty().addListener((ObservableValue<? extends Toggle> ov, Toggle old_toggle, Toggle new_toggle) -> 
-		{
-			{ 
-				 if (radioGroup.getSelectedToggle() != null) 
-				 {
-					 showAllHistory = (selectIntervalRb.isSelected() == false);
-					 startPeriod.setDisable(showAllHistory);
-					 endPeriod.setDisable(showAllHistory);
-					 onHistoryIntervalChanged();
-				 }    
-		    }	
-		});
-//		currentlyAdmittedCkB.selectedProperty().addListener(ObservableValue<? extends Boolean> ov, Boolean old_val, Boolean new_val) -> {
-//	            if()    
-//	        }
-//	    });
-		currentlyAdmittedCkB.setOnAction(event -> onHistoryIntervalChanged());
-	}
-	
 	public void setViewModel(IDoctorHistoryViewModel viewModel)
 	{
 		mViewModel = viewModel;
 		assert(mViewModel != null);
 	}
-
-    private void showPatientsRecord(HospitalizedPatient patient)
-    {
-    	ViewManager.showPatientsRecord(patient);
-    }
-    private HospitalizedPatient getSelectedPatient() throws MissingSelectionException
-    {
-    	HospitalizedPatient patient = null;
-    	SelectionModel<Consultation> selectionModel = consultationTable.getSelectionModel();
-    	if(!selectionModel.isEmpty())
-    	{	//focus on the table can be lost so we should check if there is really a patient selected 
-    		Consultation consultation = selectionModel.getSelectedItem();
-    		if(consultation != null)
-    		{
-    			patient = consultation.getPatient();
-    		}
-    	}    	
-    	if(patient == null)
-    	{
-    		throw new MissingSelectionException("Please select a patient from the table");
-    	}
-		return patient;  
-    }
+	
+	@Override
+	public void initialize(URL arg0, ResourceBundle arg1) 
+	{
+		configureHistoryTable();
+		
+		DoctorsHelper.showPatientsRecordOnDoubleClick(consultationTable);
+		
+		startPeriod.setValue(LocalDate.now());
+		endPeriod.setValue(LocalDate.now());
+		
+		startPeriod.setOnAction(event -> onHistoryIntervalChanged());
+		endPeriod.setOnAction(event -> onHistoryIntervalChanged());
+		currentlyAdmittedCkB.setOnAction(event -> onCurrentlyAdmittedChanged());
+		
+		radioGroup.selectedToggleProperty().addListener((ObservableValue<? extends Toggle> ov, Toggle old_toggle, Toggle new_toggle) -> 
+		{
+			 if (radioGroup.getSelectedToggle() != null) 
+			 {
+				 showAllHistory = (selectIntervalRb.isSelected() == false);
+				 startPeriod.setDisable(showAllHistory);
+				 endPeriod.setDisable(showAllHistory);
+				 onHistoryIntervalChanged();
+			 }
+		});
+	}
 	
 	private void configureHistoryTable()
     {
@@ -160,13 +123,17 @@ public class DoctorHistoryViewController  implements Initializable
 			}
 		});
     }
-	
 
 	public void setDoctorHistory(ObservableList<Consultation> consultations)
 	{
 		consultationTable.setItems(consultations);
 	}
 	
+	private void onCurrentlyAdmittedChanged()
+	{
+		showAllHistory = (selectIntervalRb.isSelected() == false);
+		onHistoryIntervalChanged();
+	}
 	
 	private void onHistoryIntervalChanged()
 	{

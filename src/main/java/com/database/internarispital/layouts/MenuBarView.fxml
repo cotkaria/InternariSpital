@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import java.lang.*?>
+<?import javafx.scene.layout.*?>
+
+<MenuBar fx:id="menuBar" prefHeight="30.0" prefWidth="601.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.database.internarispital.views.menuBar.MenuBarViewController">
+  <menus>
+    <Menu mnemonicParsing="false" text="Navigation">
+      <items>
+            <MenuItem fx:id="mainLobby" mnemonicParsing="false" text="Main Lobby" />
+            <Menu mnemonicParsing="false" text="Patients Lobby">
+              <items>
+                <MenuItem fx:id="browsePatients" mnemonicParsing="false" text="Browse" />
+                  <MenuItem fx:id="hospitalizePatients" mnemonicParsing="false" text="Hospitalize" />
+              </items>
+            </Menu>
+            <Menu mnemonicParsing="false" text="Doctors Lobby">
+              <items>
+                  <MenuItem fx:id="browseDoctors" mnemonicParsing="false" text="Browse" />
+                <MenuItem fx:id="diagnosticationView" mnemonicParsing="false" text="Diagnosticate" />
+              </items>
+            </Menu>
+            <Menu mnemonicParsing="false" text="Administration Lobby">
+              <items>
+                <MenuItem fx:id="editsPatientsView" mnemonicParsing="false" text="Edit Patients" />
+                  <MenuItem fx:id="editsDoctorsView" mnemonicParsing="false" text="Edit Doctors" />
+                  <MenuItem fx:id="editsFacilitiesView" mnemonicParsing="false" text="Edit Facilities" />
+              </items>
+            </Menu>
+      </items>
+    </Menu>
+    <Menu mnemonicParsing="false" text="Help">
+      <items>
+        <MenuItem mnemonicParsing="false" text="About" />
+      </items>
+    </Menu>
+  </menus>
+</MenuBar>

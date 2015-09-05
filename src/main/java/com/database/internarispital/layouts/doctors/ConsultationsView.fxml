@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.lang.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="632.0" prefWidth="970.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.database.internarispital.views.doctors.diagnosticate.DoctorsViewController">
+   <children>
+      <ComboBox fx:id="doctorsList" layoutX="603.0" layoutY="333.0" prefHeight="25.0" prefWidth="178.0" promptText="Select doctor" />
+      <ComboBox fx:id="diagnosticsList" layoutX="605.0" layoutY="153.0" prefHeight="25.0" prefWidth="178.0" promptText="Select diagnostic" />
+      <Label layoutX="540.0" layoutY="337.0" text="Doctor" />
+      <TableView fx:id="consultationTable" layoutX="39.0" layoutY="66.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="406.0" prefWidth="388.0">
+         <columnResizePolicy>
+            <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
+         </columnResizePolicy>
+         <columns>
+            <TableColumn fx:id="patientNameColumn" prefWidth="85.0" text="Patient" />
+            <TableColumn fx:id="accomodationColumn" prefWidth="146.0" text="Accomodation" />
+            <TableColumn fx:id="doctorNameColumn" prefWidth="100.0" text="Doctor" />
+            <TableColumn fx:id="diagnosticColumn" prefWidth="75.0" text="Diagnostic" />
+            <TableColumn fx:id="consultationDate" prefWidth="78.0" text="Date" />
+         </columns>
+      </TableView>
+      <Label layoutX="539.0" layoutY="157.0" text="Diagnostic" />
+      <Label layoutX="547.0" layoutY="113.0" text="Category" />
+      <ComboBox fx:id="diagCategoryList" layoutX="604.0" layoutY="109.0" prefHeight="25.0" prefWidth="178.0" promptText="Select diagnostic category" />
+      <DatePicker fx:id="diagDatePicker" layoutX="603.0" layoutY="201.0" prefHeight="25.0" prefWidth="178.0" promptText="Select Date" />
+      <Label layoutX="485.0" layoutY="205.0" text="Diagnostication date" />
+      <Button fx:id="diagnosticateButton" layoutX="660.0" layoutY="267.0" mnemonicParsing="false" text="Diagnosticate" />
+      <Button fx:id="doctorHistoryButton" layoutX="641.0" layoutY="380.0" mnemonicParsing="false" text="Show Doctor History" />
+   </children>
+</Pane>

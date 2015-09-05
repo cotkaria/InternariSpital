@@ -2,7 +2,6 @@ package com.database.internarispital.entities.patients;
 
 public class Patient extends PatientData
 {
-
 	private int mPatientId;
 	
 	public Patient(Patient patient)
@@ -24,5 +23,10 @@ public class Patient extends PatientData
 	{
 		return this.firstNameProperty().getValue() + " " + this.lastNameProperty().getValue();
 	}
-	
+
+	@Override
+	public String toString()
+	{
+		return getName() + ", " + birthDateProperty().getValue();
+	}
 }

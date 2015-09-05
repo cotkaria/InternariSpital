@@ -7,7 +7,9 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -35,12 +37,25 @@ public class DataBase
 	private static final String USER = "client";
 	private static final String PASSWORD = "conexiune";
 	
+	private static final String INSERT_DOCTOR 			= "INSERT INTO Doctors 			VALUES (?, ?, ?, ?, ?)";
+	private static final String INSERT_PATIENT 			= "INSERT INTO Patients 		VALUES (?, ?, ?)";
+	private static final String INSERT_CONSULTATION 	= "INSERT INTO Consultations 	VALUES( ?, ?, ?, ?)";
+	private static final String INSERT_SECTION 			= "INSERT INTO Sections 		VALUES (?)";
+	private static final String INSERT_WARD 			= "INSERT INTO WARDS 			VALUES (?, ?)";
+	private static final String INSERT_BED				= "INSERT INTO BEDS 			VALUES (?, ?, ?)";
+	
+	private static final int INVALID_ID = -1;
+	
 	private SQLServerDataSource mDataSource;
 	private Connection mConnection;
 	private Statement mStatement; 
 	private PreparedStatement mInsertDoctorStatement;
 	private PreparedStatement mInsertPatientStatement;
 	private PreparedStatement mInsertConsultationStatement;
+	private PreparedStatement mInsertSectionStatement;
+	private PreparedStatement mInsertWardStatement;
+	private PreparedStatement mInsertBedStatement;
+	private List<Statement> mStatementsToClose;
 	
 	public DataBase() throws SQLException
 	{
@@ -63,10 +78,7 @@ public class DataBase
 		try
 		{
 			mConnection = mDataSource.getConnection();
-    		mStatement = mConnection.createStatement();
-    		initInsertDoctorStatement();
-    		initInsertPatientStatement();
-    		initInsertConsultationStatement();
+    		initStatements();
 		}
 		catch(SQLException e1)
 		{
@@ -75,33 +87,41 @@ public class DataBase
 		}
 	}
 	
+	private void initStatements() throws SQLException
+	{
+		mStatementsToClose = new ArrayList<Statement>();
+		
+		mStatement = mConnection.createStatement();
+		mStatementsToClose.add(mStatement);
+		
+		mInsertDoctorStatement 			= initStatement(INSERT_DOCTOR);
+		mInsertPatientStatement 		= initStatement(INSERT_PATIENT);
+		mInsertConsultationStatement 	= initStatement(INSERT_CONSULTATION);
+		mInsertSectionStatement 		= initStatement(INSERT_SECTION);
+		mInsertWardStatement 			= initStatement(INSERT_WARD);
+		mInsertBedStatement 			= initStatement(INSERT_BED);
+	}
 	
-	private void initInsertDoctorStatement() throws SQLException
+	private PreparedStatement initStatement(String sqlQuery) throws SQLException
 	{
-		String sqlQuery = "INSERT INTO Doctors VALUES (?, ?, ?, ?, ?)";
-		mInsertDoctorStatement = mConnection.prepareStatement(sqlQuery, Statement.RETURN_GENERATED_KEYS);
-	}
-	private void initInsertPatientStatement() throws SQLException
-	{
-		String sqlQuery = "INSERT INTO Patients VALUES (?, ?, ?)";
-		mInsertPatientStatement = mConnection.prepareStatement(sqlQuery, Statement.RETURN_GENERATED_KEYS);
-	}
-	private void initInsertConsultationStatement() throws SQLException
-	{
-		String sqlQuery = "INSERT INTO Consultations VALUES(?, ?, ?, ?)";
-		mInsertConsultationStatement = mConnection.prepareStatement(sqlQuery, Statement.RETURN_GENERATED_KEYS);
+		PreparedStatement statement = mConnection.prepareStatement(sqlQuery, Statement.RETURN_GENERATED_KEYS);
+		mStatementsToClose.add(statement);
+		return statement;
 	}
 	
 	@Override
 	public void finalize()
 	{
-		//TODO We should keep all of these statements in 
-		// a list to ensure that all of them properly closed.
-		closeStatement(mStatement);
-		closeStatement(mInsertDoctorStatement);
-		closeStatement(mInsertPatientStatement);
-		closeStatement(mInsertConsultationStatement);
+		closeStatements();
 		closeConnection();	
+	}
+	
+	private void closeStatements()
+	{
+		for(Statement st: mStatementsToClose)
+		{
+			closeStatement(st);
+		}
 	}
 	
 	private void closeStatement(Statement statement)
@@ -147,17 +167,8 @@ public class DataBase
 			mInsertDoctorStatement.setString(4, doctorData.specialityProperty().getValue());
 			mInsertDoctorStatement.setBoolean(5, true);
 
-			int rowsModified = mInsertDoctorStatement.executeUpdate();
-			int doctorId = -1;
-			if (rowsModified == 1)
-			{
-				ResultSet generatedKeys = mInsertDoctorStatement.getGeneratedKeys();
-				if(generatedKeys.next())
-				{
-					doctorId = generatedKeys.getInt(1);
-					doctor = new Doctor(doctorId, doctorData);
-				}
-			}
+			int doctorId = executeInsertAndGetKey(mInsertDoctorStatement);
+			doctor = new Doctor(doctorId, doctorData);
 		} 
 		catch (SQLException e) 
 		{
@@ -166,13 +177,32 @@ public class DataBase
 		return doctor;
 	}
 	
+	public ObservableList<Patient> getNotHospitalizedPatients()
+	{
+		ObservableList<Patient> patients = FXCollections.observableArrayList();
+        try
+        {   
+        	String sqlQuery = "SELECT * FROM Patients "
+        			+ "WHERE patient_Id NOT IN (SELECT patient_Id from Hospitalizations)";
+        	ResultSet resultSet = mStatement.executeQuery(sqlQuery);
+        	while(resultSet.next())
+        	{
+        		patients.add(parseResultSetForPatient(resultSet));
+        	}
+        }
+        catch(Exception e)
+        {
+        	e.printStackTrace();        	
+        }
+        return patients;
+	}
+	
 	public ObservableList<HospitalizedPatient> getHospitalizedPatients()
 	{
 		ObservableList<HospitalizedPatient> hospitalizedPatients = FXCollections.observableArrayList();
         
         try
         {   
-        	 //STEP 4: Execute a query
         	String sqlQuery = "SELECT P.patient_Id, P.patient_name, P.patient_Surname, P.birth_date, B.bed_number, W.ward_number, S.section_name "
         					+ "FROM Patients AS P " 
         					+ "INNER JOIN Hospitalizations AS H ON P.patient_Id = H.patient_Id "
@@ -181,7 +211,6 @@ public class DataBase
         					+ "INNER JOIN Sections AS S ON S.section_Id = W.section_Id";
         	ResultSet resultSet = mStatement.executeQuery(sqlQuery);
         	
-        	//STEP 5: Extract data from ResultSet
         	while(resultSet.next())
         	{
         		hospitalizedPatients.add(parseResultSetForHospitalizedPatient(resultSet));
@@ -200,7 +229,6 @@ public class DataBase
 		int bedNumber = resultSet.getInt("bed_number");
 		
 		return new HospitalizedPatient(parseResultSetForPatient(resultSet), section, wardNumber, bedNumber);
-		
 	}
 	
 	private Patient parseResultSetForPatient(ResultSet resultSet) throws SQLException
@@ -249,20 +277,8 @@ public class DataBase
 			mInsertPatientStatement.setString(2, patientData.lastNameProperty().getValue());
 			mInsertPatientStatement.setString(3, patientData.birthDateProperty().getValue());
 
-			int rowsModified = mInsertPatientStatement.executeUpdate();
-			
-			System.out.println("insertNewPatient() rowsModified = " + rowsModified);
-			
-			int patientId = -1;
-			if (rowsModified == 1)
-			{
-				ResultSet generatedKeys = mInsertPatientStatement.getGeneratedKeys();
-				if(generatedKeys.next())
-				{
-					patientId = generatedKeys.getInt(1);
-					patient = new Patient(patientId, patientData);
-				}
-			}
+			int patientId = executeInsertAndGetKey(mInsertPatientStatement);
+			patient = new Patient(patientId, patientData);
 		} 
 		catch (SQLException e) 
 		{
@@ -321,6 +337,11 @@ public class DataBase
 				setBedOccupancy(bedId, false);
 				String sqlDischarge = "DELETE FROM Hospitalizations WHERE bed_Id = " + bedId;
 				mStatement.executeUpdate(sqlDischarge);
+				
+				String sqlUpdateRecords = "UPDATE Hospitalization_Records "
+						+ "SET discharge_date = '" + getCurrentDate() + "' "
+						+ "WHERE patient_Id = " + patientId;
+				mStatement.executeUpdate(sqlUpdateRecords);
 			}
 		}
 		catch (SQLException e)
@@ -365,8 +386,21 @@ public class DataBase
 	}
 	public ObservableList<Bed> getVacantBeds(int wardId)
 	{
-		ObservableList<Bed> bedsList = FXCollections.observableArrayList();
 		String sqlQuery = "SELECT * FROM Beds WHERE ward_Id = " + wardId + " AND occupancy = 'FALSE'";
+		ObservableList<Bed> bedsList = getBedsInternal(wardId, sqlQuery);
+		return bedsList;
+	}
+	
+	public ObservableList<Bed> getBeds(int wardId)
+	{
+		String sqlQuery = "SELECT * FROM Beds WHERE ward_Id = " + wardId;
+		ObservableList<Bed> bedsList = getBedsInternal(wardId, sqlQuery);
+		return bedsList;
+	}
+	
+	private ObservableList<Bed> getBedsInternal(int wardId, String sqlQuery)
+	{
+		ObservableList<Bed> bedsList = FXCollections.observableArrayList();
 		try
 		{
 			ResultSet resultSet = mStatement.executeQuery(sqlQuery);
@@ -394,9 +428,8 @@ public class DataBase
 			while(resultSet.next())
 			{
 				int wardId = resultSet.getInt("ward_Id");
-				String section  = resultSet.getString("section_Id");
 				int wardNumber = resultSet.getInt("ward_number");
-				wardsList.add(new Ward(wardId, section, wardNumber));
+				wardsList.add(new Ward(wardId, sectionId, wardNumber));
 			}
 		}
 		catch(SQLException e)
@@ -513,16 +546,9 @@ public class DataBase
 			mInsertConsultationStatement.setInt(2, doctor.doctorIdProperty().getValue());
 			mInsertConsultationStatement.setInt(3, diagnostic.diagIdProperty().getValue());
 			mInsertConsultationStatement.setString(4, consultationDate);
-			int rowsModified = mInsertConsultationStatement.executeUpdate();
-			if(rowsModified == 1)
-			{
-				ResultSet resultSet = mInsertConsultationStatement.getGeneratedKeys();
-				if(resultSet.next())
-				{
-					int consultationId = resultSet.getInt(1);
-					consultation = new Consultation(consultationId, patient, doctor, diagnostic, consultationDate);
-				}
-			}
+
+			int consultationId = executeInsertAndGetKey(mInsertConsultationStatement);
+			consultation = new Consultation(consultationId, patient, doctor, diagnostic, consultationDate);
 		} 
 		catch (SQLException e) 
 		{
@@ -692,5 +718,108 @@ public class DataBase
 		String consultationDate = resultSet.getString("consultation_date");
 		HospitalizedPatient hospitalizedPatient = new HospitalizedPatient(parseResultSetForPatient(resultSet)); 
 		return new Consultation(consultationId, hospitalizedPatient, doctor, diagnostic, consultationDate);
+	}
+	
+	public Section insertSection(String sectionName)
+	{
+		Section section = null;
+		try 
+		{
+			mInsertSectionStatement.setString(1, sectionName);
+
+			int sectionId = executeInsertAndGetKey(mInsertSectionStatement);
+			section = new Section(sectionId, sectionName);
+		}
+		catch (SQLException e) 
+		{
+			e.printStackTrace();
+		}
+		return section;
+	}
+
+	public Ward insertWard(Section section, int wardNumber)
+	{
+		Ward ward = null;
+		try 
+		{
+			mInsertWardStatement.setInt(1, wardNumber);
+			mInsertWardStatement.setInt(2, section.sectionIdProperty().getValue());
+
+			int wardId = executeInsertAndGetKey(mInsertWardStatement);
+			ward = new Ward(wardId, section.sectionIdProperty().getValue(), wardNumber);
+		}
+		catch (SQLException e) 
+		{
+			e.printStackTrace();
+		}
+		return ward;
+	}
+	
+	public Bed insertBed(Ward ward, int bedNumber)
+	{
+		Bed bed = null;
+		try 
+		{
+			mInsertBedStatement.setInt(1, ward.wardIdProperty().getValue());
+			mInsertBedStatement.setInt(2, bedNumber);
+			mInsertBedStatement.setBoolean(3, false);
+
+			int bedId = executeInsertAndGetKey(mInsertBedStatement);
+			bed = new Bed(bedId, bedNumber, ward.wardIdProperty().getValue(), false);
+		}
+		catch (SQLException e) 
+		{
+			e.printStackTrace();
+		}
+		return bed;
+	}
+	
+	public void removeSection(Section section)
+	{
+		String sqlUpdate = "DELETE FROM Sections WHERE section_Id = " + section.sectionIdProperty().getValue();
+		executeUpdate(sqlUpdate);
+	}
+	
+	public void removeWard(Ward ward)
+	{
+		String sqlUpdate = "DELETE FROM Wards WHERE ward_Id = " + ward.wardIdProperty().getValue();
+		executeUpdate(sqlUpdate);
+	}
+	
+	public void removeBed(Bed bed)
+	{
+		String sqlUpdate = "DELETE FROM Beds WHERE bed_Id = " + bed.wardIdProperty().getValue();
+		executeUpdate(sqlUpdate);
+	}
+	
+	private void executeUpdate(String update)
+	{
+		try
+		{
+			mStatement.executeUpdate(update);
+		}
+		catch (SQLException e)
+		{
+			e.printStackTrace();
+		}
+	}
+	
+	private int executeInsertAndGetKey(PreparedStatement statement) throws SQLException
+	{
+		int keyId = INVALID_ID;
+		int rowsModified = statement.executeUpdate();
+		if (rowsModified == 1)
+		{
+			ResultSet generatedKeys = statement.getGeneratedKeys();
+			if(generatedKeys.next())
+			{
+				keyId = generatedKeys.getInt(1);
+			}
+		}
+		else
+		{
+			throw new SQLException("No rows modified in insert.");
+		}
+		return keyId;
 	}
 }

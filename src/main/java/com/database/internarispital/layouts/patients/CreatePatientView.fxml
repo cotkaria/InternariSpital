@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import java.lang.*?>
+<?import javafx.scene.layout.*?>
+
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.database.internarispital.views.patients.create.CreatePatientViewController">
+   <children>
+      <AnchorPane layoutX="76.0" layoutY="62.0" prefHeight="139.0" prefWidth="241.0">
+         <children>
+            <Label layoutX="1.0" layoutY="37.0" text="Last Name" />
+            <Label layoutY="4.0" text="First Name" />
+            <TextField fx:id="firstNameTF" layoutX="67.0" prefHeight="25.0" prefWidth="174.0" promptText="Insert first name" />
+            <TextField fx:id="lastNameTF" layoutX="67.0" layoutY="33.0" prefHeight="25.0" prefWidth="174.0" promptText="Insert last name" />
+            <Label layoutX="2.0" layoutY="73.0" text="Birth Date" />
+            <DatePicker fx:id="birthDatePicker" layoutX="67.0" layoutY="69.0" promptText="Insert birth date" />
+         </children>
+      </AnchorPane>
+      <Button fx:id="createPatientButton" layoutX="143.0" layoutY="175.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="174.0" text="Create patient" />
+   </children>
+</AnchorPane>

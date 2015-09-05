@@ -2,19 +2,17 @@ package com.database.internarispital.entities;
 
 import javafx.beans.property.IntegerProperty;
 import javafx.beans.property.SimpleIntegerProperty;
-import javafx.beans.property.SimpleStringProperty;
-import javafx.beans.property.StringProperty;
 
 public class Ward {
 	
 	private IntegerProperty mWardId;
-	private StringProperty mSection;
+	private IntegerProperty mSectionId;
 	private IntegerProperty mWardNumber;
 	
-	public Ward(int wardId, String section, int wardNumber)
+	public Ward(int wardId, int sectionId, int wardNumber)
 	{
 		mWardId = new SimpleIntegerProperty(wardId);
-		mSection = new SimpleStringProperty(section);
+		mSectionId = new SimpleIntegerProperty(sectionId);
 		mWardNumber = new SimpleIntegerProperty(wardNumber);
 	}
 	
@@ -22,9 +20,9 @@ public class Ward {
 	{
 		return mWardId;
 	}
-	public StringProperty sectionProperty()
+	public IntegerProperty sectionIdProperty()
 	{
-		return mSection;
+		return mSectionId;
 	}
 	public IntegerProperty wardNumberProperty()
 	{

@@ -1,0 +1,22 @@
+Landing page
+- login
+- main lobby
+
+Patient stuff
+- hospitalize / discharge
+- view medical records
+- create / update / remove
+
+Doctor stuff
+- treat patients
+- create / update / remove
+- view treatment records
+
+Facilities stuff
+- create / update / remove things like sections, wards and beds
+- view stats
+
+Account types:
+- Patient: can view his own medical record, and choose to discharge himself
+- Doctor: can view all the patients, can treat any patient, can view the medical record for any patient, can view his own treatment record
+- Administrator: can update the accounts for patients, doctors and other admins; can edit facilities stuff

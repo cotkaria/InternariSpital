@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.text.*?>
+<?import javafx.scene.*?>
+<?import javafx.scene.control.*?>
+<?import java.lang.*?>
+<?import javafx.scene.layout.*?>
+
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="744.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.database.internarispital.views.facilities.EditFacilitiesViewController">
+   <children>
+      <ComboBox fx:id="sectionsCB" layoutX="39.0" layoutY="70.0" prefWidth="150.0" />
+      <ComboBox fx:id="wardsCB" layoutX="39.0" layoutY="117.0" prefWidth="150.0" />
+      <ComboBox fx:id="bedsCB" layoutX="39.0" layoutY="169.0" prefWidth="150.0" />
+      <TextField fx:id="sectionNameTF" layoutX="209.0" layoutY="70.0" />
+      <TextField fx:id="wardNumberTF" layoutX="209.0" layoutY="117.0" />
+      <TextField fx:id="bedNumberTF" layoutX="209.0" layoutY="169.0" />
+      <Button fx:id="removeSectionButton" layoutX="527.0" layoutY="68.0" mnemonicParsing="false" text="Remove section" />
+      <Button fx:id="removeWardButton" layoutX="527.0" layoutY="115.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="100.0" text="Remove ward" />
+      <Button fx:id="removeBedButton" layoutX="527.0" layoutY="167.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="100.0" text="Remove bed" />
+      <Button fx:id="addSectionButton" layoutX="378.0" layoutY="68.0" mnemonicParsing="false" text="Add section" />
+      <Button fx:id="addWardButton" layoutX="378.0" layoutY="115.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="79.0" text="Add ward" />
+      <Button fx:id="addBedButton" layoutX="378.0" layoutY="167.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="79.0" text="Add bed" />
+      <Label layoutX="39.0" layoutY="21.0" text="Edit Facilities:">
+         <font>
+            <Font size="14.0" />
+         </font>
+      </Label>
+   </children>
+</AnchorPane>

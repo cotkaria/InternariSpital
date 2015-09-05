@@ -1,42 +1,18 @@
 package com.database.internarispital;
 
-import java.io.IOException;
-import java.io.InputStream;
 import java.sql.SQLException;
 
-import com.database.internarispital.entities.doctors.Doctor;
-import com.database.internarispital.entities.patients.HospitalizedPatient;
-import com.database.internarispital.entities.patients.Patient;
-import com.database.internarispital.views.doctorHistory.DoctorHistoryViewController;
-import com.database.internarispital.views.doctorHistory.DoctorHistoryViewModel;
-import com.database.internarispital.views.doctors.DoctorsViewController;
-import com.database.internarispital.views.doctors.DoctorsViewModel;
-import com.database.internarispital.views.editDoctors.EditDoctorsViewController;
-import com.database.internarispital.views.editDoctors.EditDoctorsViewModel;
-import com.database.internarispital.views.patients.PatientsViewController;
-import com.database.internarispital.views.patients.PatientsViewModel;
-import com.database.internarispital.views.records.RecordsViewController;
-import com.database.internarispital.views.records.RecordsViewModel;
+import com.database.internarispital.util.DialogHelper;
+import com.database.internarispital.views.ViewManager;
 
 import javafx.application.Application;
 import javafx.application.Platform;
-import javafx.fxml.FXMLLoader;
-import javafx.fxml.JavaFXBuilderFactory;
-import javafx.scene.Parent;
-import javafx.scene.Scene;
 import javafx.stage.Stage;
-import javafx.util.Callback;
 
 public class Main extends Application
 {
-	private static final String PATIENTS_VIEW_PATH = "PatientsView.fxml";
-	private static final String DOCTORS_VIEW_PATH = "DoctorsView.fxml";
-	private static final String RECORDS_VIEW_PATH = "RecordsView.fxml";
-	private static final String EDIT_DOCTORS_VIEW_PATH = "EditDoctorsView.fxml";
-	private static final String DOCTOR_HISTORY_VIEW_PATH = "DoctorHistoryView.fxml";
-	
-	private static final String VERSION = "1.0.0";
-	private static final String APP_NAME = "Patient Management";
+	public static final String VERSION = "1.0.0";
+	public static final String APP_NAME = "Patient Management";
 	private Stage mStage;
 	private DataBase mDataBase;
 	
@@ -50,14 +26,16 @@ public class Main extends Application
 	{
 		mStage = stage;
 		mStage.setResizable(false);
-		try
+		initHelpers();
+		
+		if(initDatabase())
 		{
-			mDataBase = new DataBase();
-			showPatientsView();
+			configureManagers();
+			ViewManager.showMainView();
 		}
-		catch (SQLException e) 
+		else
 		{
-			e.printStackTrace();
+			//DialogHelper.showErrorPopup("Could not connect to the database. See the log for more details.");
 			Platform.exit();//Replace this with a pop-up error message
 		}
 	}
@@ -68,122 +46,28 @@ public class Main extends Application
 		//TODO
 	}
 	
-	public void showMainView()
+	private boolean initDatabase()
 	{
-		
-	}
-	
-	private void showPatientsView()
-	{
-		setTitle("Patient View");
-		PatientsViewController patientsViewController = (PatientsViewController)loadScene(PATIENTS_VIEW_PATH, mStage);
-		
-		Callback<Void, Void> showDoctorsViewCb = (noParam ->
-		{
-			showDoctorsView();
-			return null;
-		});
-		Callback<Void, Void> showAdminViewCb = (noParam ->
-		{
-			showAdministrationView();
-			return null;
-		});
-		
-		new PatientsViewModel(patientsViewController, mDataBase, showDoctorsViewCb, showAdminViewCb);
-	}
-	
-	private void showDoctorsView()
-	{		
-		setTitle("Patient Consultation");
-		DoctorsViewController doctorsViewController = (DoctorsViewController)loadScene(DOCTORS_VIEW_PATH, mStage);
-		
-		Callback<Void, Void> showPatientsViewCb = (noParam ->
-		{
-			showPatientsView();
-			return null;
-		});
-		Callback<HospitalizedPatient, Void> showPatientsRecordCb = (patient ->
-		{
-			showPatientsRecord(patient);
-			return null;
-		});
-		Callback<Doctor, Void> showDoctorHistoryCb = (doctor ->
-		{
-			showDoctorHistory(doctor);
-			return null;
-		});
-		
-		new DoctorsViewModel(doctorsViewController, mDataBase, showPatientsViewCb, showPatientsRecordCb, showDoctorHistoryCb);
-		
-	}
-	
-	private void showDoctorHistory(Doctor doctor)
-	{
-		final Stage historyStage = new Stage();
-		historyStage.setTitle("Treated Patients by  " + doctor.getName());
-		historyStage.setResizable(false);
-		DoctorHistoryViewController doctorHistoryViewController = (DoctorHistoryViewController) loadScene(DOCTOR_HISTORY_VIEW_PATH, historyStage);
-		Callback<HospitalizedPatient, Void> showPatientsRecordCb = (patient ->
-		{
-			showPatientsRecord(patient);
-			return null;
-		});
-		new DoctorHistoryViewModel(doctorHistoryViewController, mDataBase, doctor, showPatientsRecordCb);
-	}
-	
-	private void showPatientsRecord(HospitalizedPatient patient)
-	{
-		final Stage recordStage = new Stage();
-		recordStage.setTitle("Medical Record for " + patient.getName());
-		recordStage.setResizable(false);
-		RecordsViewController recordsViewController = (RecordsViewController) loadScene(RECORDS_VIEW_PATH, recordStage);
-		new RecordsViewModel(recordsViewController, mDataBase, patient);
-	}
-	
-	private void showAdministrationView()
-	{
-		setTitle("Administration View");
-		EditDoctorsViewController controller = (EditDoctorsViewController) loadScene(EDIT_DOCTORS_VIEW_PATH, mStage);
-		
-		Callback<Void, Void> returnCb = (noParam ->
-		{
-			showPatientsView();
-			return null;
-		});
-		
-		new EditDoctorsViewModel(controller, mDataBase, returnCb);
-	}
-	
-	private Object loadScene(String scenePath, Stage stage)
-	{
-		Parent root = null;
-		FXMLLoader loader;
+		boolean success = false;
 		try
 		{
-			loader = new FXMLLoader();
-			loader.setBuilderFactory(new JavaFXBuilderFactory());
-			loader.setLocation(getClass().getResource(scenePath));
-			InputStream inputStream = getClass().getResourceAsStream(scenePath);
-		
-			if(inputStream != null)
-			{
-				root = (Parent)loader.load(inputStream);
-				Scene scene = new Scene(root);
-				stage.setScene(scene);
-				stage.show();
-			}
-			return loader.getController();
+			mDataBase = new DataBase();
+			success = true;
 		}
-		catch(IOException e)
+		catch (SQLException e) 
 		{
 			e.printStackTrace();
 		}
-		return null;
+		return success;
 	}
 	
-	
-	private void setTitle(String name)
+	private void initHelpers()
 	{
-		mStage.setTitle(APP_NAME + " - " + name + " v" + VERSION);
+		DialogHelper.setWindow(mStage);
+	}
+	
+	private void configureManagers()
+	{
+		ViewManager.init(mStage, mDataBase);
 	}
 }

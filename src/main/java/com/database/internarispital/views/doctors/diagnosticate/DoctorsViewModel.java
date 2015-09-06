@@ -8,10 +8,10 @@ import com.database.internarispital.entities.patients.HospitalizedPatient;
 
 public class DoctorsViewModel implements IDoctorsViewModel
 {
-	private DoctorsViewController mDoctorsViewController;
+	private DiagnosticationViewController mDoctorsViewController;
 	private DataBase mDataBase;
 	
-	public DoctorsViewModel(DoctorsViewController doctorsViewController, DataBase dataBase)
+	public DoctorsViewModel(DiagnosticationViewController doctorsViewController, DataBase dataBase)
 	{
 		mDoctorsViewController = doctorsViewController;
 		mDataBase = dataBase;

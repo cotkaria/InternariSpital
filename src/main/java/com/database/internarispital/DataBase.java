@@ -171,8 +171,7 @@ public class DataBase
         			+ "Accounts A INNER JOIN AccountTypes AT "
         			+ "ON A.account_type = AT.type_id "
         			+ "WHERE A.account_name = '" + userName + "' "
-        			+ "AND "
-        			+ "A.account_password = '" + password + "'";
+        			+ "AND A.account_password = '" + password + "'";
         	ResultSet resultSet = mStatement.executeQuery(sqlQuery);
         	if(resultSet.next())
         	{
@@ -272,6 +271,17 @@ public class DataBase
 		return getDoctor(doctor.doctorIdProperty().getValue());
 	}
 	
+	public ObservableList<HospitalizedPatient> getAllPatients()
+	{
+		ObservableList<HospitalizedPatient> allPatients = getHospitalizedPatients();
+		ObservableList<Patient> patients = getNotHospitalizedPatients();
+		for(Patient patient: patients)
+		{
+			allPatients.add(new HospitalizedPatient(patient));
+		}
+		return allPatients;
+	}
+	
 	public ObservableList<Patient> getNotHospitalizedPatients()
 	{
 		ObservableList<Patient> patients = FXCollections.observableArrayList();
@@ -298,7 +308,7 @@ public class DataBase
         
         try
         {   
-        	String sqlQuery = "SELECT P.patient_Id, P.patient_name, P.patient_Surname, P.birth_date, B.bed_number, W.ward_number, S.section_name "
+        	String sqlQuery = "SELECT * "
         					+ "FROM Patients AS P " 
         					+ "INNER JOIN Hospitalizations AS H ON P.patient_Id = H.patient_Id "
         					+ "INNER JOIN Beds AS B ON B.bed_Id = H.bed_Id "
@@ -337,21 +347,80 @@ public class DataBase
 		return new Patient(patientId, patientData);
 	}
 	
-	public HospitalizedPatient getHospitalizedPatient(Patient patient)
+	public HospitalizedPatient getHospitalizedPatient(Account account)
 	{
 		HospitalizedPatient hospitalizedPatient = null;
-		String sqlQuery = "SELECT P.patient_Id, B.bed_number, W.ward_number, S.section_name "
+		String sqlQuery = "SELECT patient_Id "
 				+ "FROM Patients AS P " 
-				+ "INNER JOIN Hospitalizations AS H ON P.patient_Id = H.patient_Id "
-				+ "INNER JOIN Beds AS B ON B.bed_Id = H.bed_Id "
-				+ "INNER JOIN Wards AS W ON W.ward_Id = B.ward_Id "
-				+ "INNER JOIN Sections AS S ON S.section_Id = W.section_Id "
-				+ "WHERE P.patient_Id = " + patient.getPatientId();
+				+ "WHERE P.account_Id = " + account.getId();
 		try 
 		{
 			ResultSet resultSet = mStatement.executeQuery(sqlQuery);
 			if(resultSet.next())
 			{
+				int patientId = resultSet.getInt("patient_Id");
+				if(isPatientHospitalized(patientId))
+				{
+					hospitalizedPatient = getHospitalizedPatient(patientId);
+				}
+				else
+				{
+					hospitalizedPatient = new HospitalizedPatient(getPatient(patientId));	
+				}
+			}
+		} 
+		catch (SQLException e) 
+		{
+			e.printStackTrace();
+		}
+		
+		return hospitalizedPatient;
+	}
+	
+	private boolean isPatientHospitalized(int patientId)
+	{
+		boolean isHospitalized = false;
+		
+		String sqlQuery = "SELECT patient_Id "
+				+ "FROM Hospitalizations " 
+				+ "WHERE patient_Id = " + patientId;
+		try 
+		{
+			ResultSet resultSet = mStatement.executeQuery(sqlQuery);
+			if(resultSet.next())
+			{
+				isHospitalized = true;
+			}
+		}
+		catch(SQLException e)
+		{
+			e.printStackTrace();
+		}
+		return isHospitalized;
+	}
+	
+	public HospitalizedPatient getHospitalizedPatient(Patient patient)
+	{
+		HospitalizedPatient hospitalizedPatient = getHospitalizedPatient(patient.getPatientId());
+		return hospitalizedPatient;
+	}
+	
+	private HospitalizedPatient getHospitalizedPatient(int patientId)
+	{
+		HospitalizedPatient hospitalizedPatient = null;
+		String sqlQuery = "SELECT * "
+				+ "FROM Patients AS P " 
+				+ "INNER JOIN Hospitalizations AS H ON P.patient_Id = H.patient_Id "
+				+ "INNER JOIN Beds AS B ON B.bed_Id = H.bed_Id "
+				+ "INNER JOIN Wards AS W ON W.ward_Id = B.ward_Id "
+				+ "INNER JOIN Sections AS S ON S.section_Id = W.section_Id "
+				+ "WHERE P.patient_Id = " + patientId;
+		try 
+		{
+			ResultSet resultSet = mStatement.executeQuery(sqlQuery);
+			if(resultSet.next())
+			{
+				Patient patient = parseResultSetForPatient(resultSet);
 				String section = resultSet.getString("section_name");
 				int wardNumber = resultSet.getInt("ward_number");
 				int bedNumber = resultSet.getInt("bed_number");
@@ -365,6 +434,29 @@ public class DataBase
 		
 		return hospitalizedPatient;
 	}
+	
+	private Patient getPatient(int patientId)
+	{
+		Patient patient = null;
+		String sqlQuery = "SELECT * "
+				+ "FROM Patients AS P " 
+				+ "WHERE P.patient_Id = " + patientId;
+		try 
+		{
+			ResultSet resultSet = mStatement.executeQuery(sqlQuery);
+			if(resultSet.next())
+			{
+				patient = parseResultSetForPatient(resultSet);
+			}
+		} 
+		catch (SQLException e) 
+		{
+			e.printStackTrace();
+		}
+		
+		return patient;
+	}
+	
 	public Patient insertPatient(PatientData patientData)
 	{
 		Patient patient = null;

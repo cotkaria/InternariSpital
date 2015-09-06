@@ -32,7 +32,7 @@ import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.util.Callback;
 
-public class DoctorsViewController implements Initializable
+public class DiagnosticationViewController implements Initializable
 {
     @FXML
     private TableView<Consultation> consultationTable;

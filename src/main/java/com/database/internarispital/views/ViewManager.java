@@ -13,7 +13,7 @@ import com.database.internarispital.views.doctors.browse.BrowseDoctorsViewContro
 import com.database.internarispital.views.doctors.browse.BrowseDoctorsViewModel;
 import com.database.internarispital.views.doctors.create.CreateDoctorViewController;
 import com.database.internarispital.views.doctors.create.CreateDoctorViewModel;
-import com.database.internarispital.views.doctors.diagnosticate.DoctorsViewController;
+import com.database.internarispital.views.doctors.diagnosticate.DiagnosticationViewController;
 import com.database.internarispital.views.doctors.diagnosticate.DoctorsViewModel;
 import com.database.internarispital.views.doctors.edit.EditDoctorsViewController;
 import com.database.internarispital.views.doctors.edit.EditDoctorsViewModel;
@@ -31,7 +31,7 @@ import com.database.internarispital.views.patients.browse.BrowsePatientsViewCont
 import com.database.internarispital.views.patients.browse.BrowsePatientsViewModel;
 import com.database.internarispital.views.patients.create.CreatePatientViewController;
 import com.database.internarispital.views.patients.create.CreatePatientViewModel;
-import com.database.internarispital.views.patients.hospitalize.PatientsViewController;
+import com.database.internarispital.views.patients.hospitalize.HospitalizationViewController;
 import com.database.internarispital.views.patients.hospitalize.PatientsViewModel;
 import com.database.internarispital.views.patients.records.RecordsViewController;
 import com.database.internarispital.views.patients.records.RecordsViewModel;
@@ -62,7 +62,7 @@ public class ViewManager
 
 	private static final String DOCTORS_PATH 					= LAYOUTS_PATH + "doctors/";
 	private static final String CREATE_DOCTOR_VIEW_PATH 		= DOCTORS_PATH + "CreateDoctorView.fxml";
-	private static final String CONSULTATIONS_VIEW_PATH 		= DOCTORS_PATH + "ConsultationsView.fxml";
+	private static final String DIAGNOSTICS_VIEW_PATH 			= DOCTORS_PATH + "DiagnosticsView.fxml";
 	private static final String BROWSE_DOCTORS_VIEW_PATH 		= DOCTORS_PATH + "BrowseDoctorsView.fxml";
 	private static final String DOCTOR_HISTORY_VIEW_PATH 		= DOCTORS_PATH + "DoctorHistoryView.fxml";
 	
@@ -127,7 +127,7 @@ public class ViewManager
 	public static void showHospitalizePatientsView()
 	{
 		setTitle("Hospitalize Patients View");
-		PatientsViewController patientsViewController = (PatientsViewController)loadView(HOSPITALIZE_PATIENTS_VIEW_PATH);
+		HospitalizationViewController patientsViewController = (HospitalizationViewController)loadView(HOSPITALIZE_PATIENTS_VIEW_PATH);
 		new PatientsViewModel(patientsViewController, mDataBase);
 	}
 	
@@ -145,10 +145,10 @@ public class ViewManager
 		new BrowseDoctorsViewModel(viewController, mDataBase);
 	}
 	
-	public static void showConsultationView()
+	public static void showDiagnosticsView()
 	{		
-		setTitle("Consultations View");
-		DoctorsViewController doctorsViewController = (DoctorsViewController)loadView(CONSULTATIONS_VIEW_PATH);
+		setTitle("Diagnostics View");
+		DiagnosticationViewController doctorsViewController = (DiagnosticationViewController)loadView(DIAGNOSTICS_VIEW_PATH);
 		new DoctorsViewModel(doctorsViewController, mDataBase);
 	}
 	

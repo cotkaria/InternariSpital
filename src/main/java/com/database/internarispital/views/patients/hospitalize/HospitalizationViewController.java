@@ -23,7 +23,7 @@ import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
 
-public class PatientsViewController implements Initializable
+public class HospitalizationViewController implements Initializable
 {
 	@FXML
 	private TableView<HospitalizedPatient> hospitalizedPatientsTable;

@@ -26,7 +26,7 @@ public class MainLobbyViewController implements Initializable
 	public void initialize(URL location, ResourceBundle resources)
 	{
 		goToPatientsLobbyButton.setOnAction(event -> ViewManager.showHospitalizePatientsView());
-		goToDoctorsLobbyButton.setOnAction(event -> ViewManager.showConsultationView());
+		goToDoctorsLobbyButton.setOnAction(event -> ViewManager.showDiagnosticsView());
 		goToAdministrationLobbyButton.setOnAction(event -> ViewManager.showEditDoctorsView());
 	}
 	

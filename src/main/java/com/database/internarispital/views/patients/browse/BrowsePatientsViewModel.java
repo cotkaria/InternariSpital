@@ -1,10 +1,13 @@
 package com.database.internarispital.views.patients.browse;
 
+import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 
 import com.database.internarispital.DataBase;
+import com.database.internarispital.entities.accounts.Account;
+import com.database.internarispital.entities.accounts.AccountTypes;
 import com.database.internarispital.entities.patients.HospitalizedPatient;
-import com.database.internarispital.entities.patients.Patient;
+import com.database.internarispital.login.LoginManager;
 
 public class BrowsePatientsViewModel
 {
@@ -20,13 +23,30 @@ public class BrowsePatientsViewModel
 	
 	private void configureController()
 	{
-		ObservableList<HospitalizedPatient> allPatients = mDataBase.getHospitalizedPatients();
-		ObservableList<Patient> patients = mDataBase.getNotHospitalizedPatients();
-		for(Patient patient: patients)
+		Account currentAccount = LoginManager.getLoginAccount();
+		if((currentAccount != null) && (currentAccount.getAccountType() == AccountTypes.Patient))
 		{
-			allPatients.add(new HospitalizedPatient(patient));
+			showCurrentPatient(currentAccount);
 		}
-		
-		mController.setPatients(allPatients);
+		else
+		{
+			showAllPatients();
+		}
+	}
+	
+	private void showCurrentPatient(Account account)
+	{
+		HospitalizedPatient patient = mDataBase.getHospitalizedPatient(account);
+		if(patient != null)
+		{
+			ObservableList<HospitalizedPatient> patients = FXCollections.observableArrayList();
+			patients.add(patient);
+			mController.setPatients(patients);
+		}
+	}
+	
+	private void showAllPatients()
+	{
+		mController.setPatients(mDataBase.getAllPatients());
 	}
 }

@@ -10,10 +10,10 @@ import com.database.internarispital.views.ViewManager;
 
 public class PatientsViewModel implements IPatientsViewModel
 {
-	private PatientsViewController mPatientsViewController;
+	private HospitalizationViewController mPatientsViewController;
 	private DataBase mDataBase;
 	
-	public PatientsViewModel(PatientsViewController patientsViewController, DataBase dataBase)
+	public PatientsViewModel(HospitalizationViewController patientsViewController, DataBase dataBase)
 	{
 		mPatientsViewController = patientsViewController;
 		mDataBase = dataBase;

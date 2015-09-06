@@ -84,7 +84,7 @@ public class MenuBarViewController implements Initializable
 		hospitalizePatients.setOnAction(event -> ViewManager.showHospitalizePatientsView());
 		
 		browseDoctors.setOnAction(event -> ViewManager.showBrowseDoctorsView());
-		diagnosticationView.setOnAction(event -> ViewManager.showConsultationView());
+		diagnosticationView.setOnAction(event -> ViewManager.showDiagnosticsView());
 		
 		editsPatientsView.setOnAction(event -> ViewManager.showEditPatientsView());
 		editsDoctorsView.setOnAction(event -> ViewManager.showEditDoctorsView());

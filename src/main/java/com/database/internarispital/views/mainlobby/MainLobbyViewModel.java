@@ -7,6 +7,5 @@ public class MainLobbyViewModel implements IMainLobbyViewModel
 	public MainLobbyViewModel(MainLobbyViewController viewController)
 	{
 		mViewController = viewController;
-		mViewController.setViewModel(this);
 	}
 }

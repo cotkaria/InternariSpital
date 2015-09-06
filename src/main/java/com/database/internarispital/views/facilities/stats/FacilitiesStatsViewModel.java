@@ -25,7 +25,6 @@ public class FacilitiesStatsViewModel implements IFacilitiesStatsViewModel
 	
 	private void configureViewController()
 	{
-		mViewController.setViewModel(this);
 		mViewController.setSectionsCount(mDataBase.getSectionsCount());
 		mViewController.setWardsCount(mDataBase.getWardsCount());
 		mViewController.setBedsCount(mDataBase.getBedsCount());

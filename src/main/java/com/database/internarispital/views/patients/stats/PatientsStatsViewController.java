@@ -1,7 +1,6 @@
 package com.database.internarispital.views.patients.stats;
 
 import java.net.URL;
-import java.text.DecimalFormat;
 import java.util.ResourceBundle;
 
 import com.database.internarispital.views.common.CommonHelper;
@@ -41,13 +40,6 @@ public class PatientsStatsViewController implements Initializable
     
     @FXML
     private LineChart<String, Integer> occupancyRateChart;
-	
-	private IPatientsStatsViewModel mViewModel;
-	
-	public void setViewModel(IPatientsStatsViewModel viewModel)
-	{
-		mViewModel = viewModel;
-	}
 	
 	@Override
 	public void initialize(URL location, ResourceBundle resources)

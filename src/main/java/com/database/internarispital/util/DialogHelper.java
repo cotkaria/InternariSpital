@@ -1,19 +1,17 @@
 package com.database.internarispital.util;
 
-import org.controlsfx.dialog.Dialogs;
-import javafx.stage.Window;
+import javafx.scene.control.Alert;
+import javafx.scene.control.Alert.AlertType;
 
 public class DialogHelper
 {
-	private static Window mWindow = null;
-	
-	public static void setWindow(Window window)
-	{
-		mWindow = window;
-	}
-	
 	public static void showErrorPopup(String message)
 	{
-		Dialogs.create().owner(mWindow).title("Error").message(message).showError();
+		Alert alert = new Alert(AlertType.ERROR);
+		alert.setTitle("Error");
+		alert.setHeaderText("An error has occured");
+		alert.setContentText(message);
+
+		alert.showAndWait();
 	}
 }

@@ -23,7 +23,6 @@ public class PatientsStatsViewModel implements IPatientsStatsViewModel
 	
 	private void configureViewController()
 	{
-		mViewController.setViewModel(this);
 		mViewController.setPatientsTreatedCount(mDataBase.getPatientsTreatedCount());
 		mViewController.setPatientsCurrentlyAddmited(mDataBase.getPatientsCurrentlyAddmited());
 		mViewController.setRecurringPatientsCount(mDataBase.getRecurringPatientsCount());

@@ -26,7 +26,7 @@ public class Main extends Application
 	{
 		mStage = stage;
 		mStage.setResizable(false);
-		initHelpers();
+		mStage.setOnCloseRequest(event -> onClose());
 		
 		if(initDatabase())
 		{
@@ -35,15 +35,15 @@ public class Main extends Application
 		}
 		else
 		{
-			//DialogHelper.showErrorPopup("Could not connect to the database. See the log for more details.");
+			DialogHelper.showErrorPopup("Could not connect to the database. See the log for more details.");
 			Platform.exit();//Replace this with a pop-up error message
 		}
 	}
 	
 	@Override
 	public void stop()
-	{	
-		//TODO
+	{
+		onClose();
 	}
 	
 	private boolean initDatabase()
@@ -61,13 +61,18 @@ public class Main extends Application
 		return success;
 	}
 	
-	private void initHelpers()
-	{
-		DialogHelper.setWindow(mStage);
-	}
-	
 	private void configureManagers()
 	{
 		ViewManager.init(mStage, mDataBase);
+	}
+	
+	private void onClose()
+	{
+		ViewManager.closeAllWindows();
+		if(mDataBase != null)
+		{
+			mDataBase.finalize();
+			mDataBase = null;
+		}
 	}
 }

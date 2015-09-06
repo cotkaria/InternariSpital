@@ -33,13 +33,6 @@ public class FacilitiesStatsViewController implements Initializable
     @FXML
     private LineChart<String, Double> lineChart;
     
-	private IFacilitiesStatsViewModel mViewModel;
-	
-	public void setViewModel(IFacilitiesStatsViewModel viewModel)
-	{
-		mViewModel = viewModel;
-	}
-	
 	@Override
 	public void initialize(URL location, ResourceBundle resources)
 	{

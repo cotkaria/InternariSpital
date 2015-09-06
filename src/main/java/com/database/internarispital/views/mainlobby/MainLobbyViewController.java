@@ -20,18 +20,11 @@ public class MainLobbyViewController implements Initializable
     @FXML
     private Button showFacilitiesStats;
 	
-	private IMainLobbyViewModel mViewModel;
-	
 	@Override
 	public void initialize(URL location, ResourceBundle resources)
 	{
 		showPatientsStats.setOnAction(event -> ViewManager.showPatientsStats());
 		showDoctorsStats.setOnAction(event -> ViewManager.showDoctorsStats());
 		showFacilitiesStats.setOnAction(event -> ViewManager.showFacilitiesStats());
-	}
-	
-	public void setViewModel(IMainLobbyViewModel viewModel)
-	{
-		mViewModel = viewModel;
 	}
 }

@@ -42,6 +42,7 @@ import com.database.internarispital.views.patients.records.RecordsViewModel;
 import com.database.internarispital.views.patients.stats.PatientsStatsViewController;
 import com.database.internarispital.views.patients.stats.PatientsStatsViewModel;
 
+import javafx.application.Platform;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.JavaFXBuilderFactory;
@@ -121,6 +122,11 @@ public class ViewManager
 		mViewLayoutY = menuBar.getPrefHeight();
 	}
 
+	public static void closeAllWindows()
+	{
+		Platform.exit();
+	}
+	
 	public static void showLoginView()
 	{
 		setTitle("Login view");

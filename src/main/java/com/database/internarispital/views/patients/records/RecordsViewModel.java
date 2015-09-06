@@ -31,6 +31,7 @@ public class RecordsViewModel implements IRecordsViewModel
 		mRecordsVewController.setViewModel(this);
 		mRecordsVewController.setHospitalizationPeriods(mDataBase.getHospitalizationPeriods(mPatient));
 	}
+	
 	@Override
 	public void requestConsultations(HospitalizationPeriod period) 
 	{

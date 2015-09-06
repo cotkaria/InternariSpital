@@ -86,6 +86,10 @@ public class RecordsViewController implements Initializable
 	public void setConsultations(ObservableList<Consultation> consultations)
 	{
 		recordsTable.setItems(consultations);
+		if(consultations.isEmpty() == false)
+		{
+			recordsTable.getSelectionModel().select(0);
+		}
 	}
 	
 	private void onHospitalizationPeriodSelected()

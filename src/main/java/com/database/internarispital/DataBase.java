@@ -793,11 +793,12 @@ public class DataBase
 		try 
 		{
 			ResultSet resultSet = mStatement.executeQuery(sqlQuery);
-			if(resultSet.next())
+			while(resultSet.next())
 			{
 				consultationList.add(parseResultSetForConsultation(resultSet, patient));
 			}
-			else
+			
+			if(consultationList.isEmpty())
 			{
 				consultationList.add(new Consultation(patient));
 			}
@@ -824,7 +825,8 @@ public class DataBase
 		ObservableList<HospitalizationPeriod> hospitalizationPeriods = FXCollections.observableArrayList();
 		
 		String sqlQuery = "SELECT * FROM Hospitalization_Records "
-						+ "WHERE patient_Id = " + patient.getPatientId();
+						+ "WHERE patient_Id = " + patient.getPatientId() + " "
+						+ "ORDER BY admittance_date DESC";
 		try
 		{
 			ResultSet resultSet = mStatement.executeQuery(sqlQuery);

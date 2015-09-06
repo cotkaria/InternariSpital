@@ -1,14 +1,18 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.scene.text.*?>
 <?import javafx.scene.*?>
 <?import javafx.scene.control.*?>
 <?import java.lang.*?>
 <?import javafx.scene.layout.*?>
 
-<Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.database.internarispital.views.doctors.history.DoctorHistoryViewController">
+<Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="800.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.database.internarispital.views.doctors.history.DoctorHistoryViewController">
    <children>
-      <Label fx:id="title" layoutX="23.0" layoutY="73.0" text="Most recent consultations" />
-      <TableView fx:id="consultationTable" layoutX="23.0" layoutY="100.0" prefHeight="200.0" prefWidth="227.0">
+      <Label fx:id="title" layoutX="23.0" layoutY="34.0" text="Most recent consultations">
+         <font>
+            <Font size="14.0" />
+         </font></Label>
+      <TableView fx:id="consultationTable" layoutX="23.0" layoutY="62.0" prefHeight="489.0" prefWidth="483.0">
         <columns>
           <TableColumn fx:id="patientNameColumn" prefWidth="75.0" text="Patient" />
           <TableColumn fx:id="diagnosticColumn" prefWidth="75.0" text="Diagnostic" />
@@ -18,16 +22,20 @@
             <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
          </columnResizePolicy>
       </TableView>
-      <Label fx:id="labelTip" layoutX="23.0" layoutY="316.0" text="Tip: Double-click any patient to view its full medical record." />
-      <DatePicker fx:id="startPeriod" disable="true" layoutX="346.0" layoutY="130.0" />
-      <DatePicker fx:id="endPeriod" disable="true" layoutX="346.0" layoutY="175.0" />
-      <Label layoutX="346.0" layoutY="92.0" text="Consultation date between :" />
-      <CheckBox fx:id="currentlyAdmittedCkB" layoutX="346.0" layoutY="231.0" mnemonicParsing="false" text="Currently admitted" />
-      <RadioButton fx:id="selectIntervalRb" layoutX="335.0" layoutY="56.0" mnemonicParsing="false" text="Select Interval">
-         <toggleGroup>
-            <ToggleGroup fx:id="radioGroup" />
-         </toggleGroup>
-      </RadioButton>
-      <RadioButton fx:id="allConsultationsRb" layoutX="446.0" layoutY="56.0" mnemonicParsing="false" selected="true" text="All Consultations" toggleGroup="$radioGroup" />
+      <Label fx:id="labelTip" layoutX="23.0" layoutY="558.0" text="Tip: Double-click any patient to view its full medical record." />
+      <Pane layoutX="532.0" layoutY="90.0">
+         <children>
+            <RadioButton fx:id="selectIntervalRb" mnemonicParsing="false" text="Select Interval">
+               <toggleGroup>
+                  <ToggleGroup fx:id="radioGroup" />
+               </toggleGroup>
+            </RadioButton>
+            <RadioButton fx:id="allConsultationsRb" layoutX="111.0" mnemonicParsing="false" selected="true" text="All Consultations" toggleGroup="$radioGroup" />
+            <DatePicker fx:id="startPeriod" disable="true" layoutX="11.0" layoutY="74.0" />
+            <Label layoutX="11.0" layoutY="36.0" text="Consultation date between :" />
+            <DatePicker fx:id="endPeriod" disable="true" layoutX="11.0" layoutY="119.0" />
+            <CheckBox fx:id="currentlyAdmittedCkB" layoutX="11.0" layoutY="175.0" mnemonicParsing="false" text="Currently admitted" />
+         </children>
+      </Pane>
    </children>
 </Pane>

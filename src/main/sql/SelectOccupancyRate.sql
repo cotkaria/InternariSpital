@@ -1,0 +1,2 @@
+USE InternariSpital
+SELECT COUNT(*) FROM Beds WHERE OCCUPANCY = 1

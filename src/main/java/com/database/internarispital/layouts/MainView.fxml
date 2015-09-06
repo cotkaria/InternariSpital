@@ -8,54 +8,46 @@
 
 <AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="900.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.database.internarispital.views.mainlobby.MainLobbyViewController">
    <children>
-      <GridPane alignment="CENTER_RIGHT" layoutX="130.0" layoutY="180.0" maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="180.0" prefWidth="640.0">
-        <columnConstraints>
-          <ColumnConstraints hgrow="ALWAYS" minWidth="10.0" prefWidth="100.0" />
-          <ColumnConstraints hgrow="ALWAYS" minWidth="10.0" prefWidth="100.0" />
-            <ColumnConstraints hgrow="ALWAYS" minWidth="10.0" prefWidth="100.0" />
-        </columnConstraints>
-        <rowConstraints>
-          <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-        </rowConstraints>
+      <Label alignment="CENTER" contentDisplay="CENTER" layoutX="2.0" layoutY="24.0" prefHeight="27.0" prefWidth="900.0" text="Welcome to the Unirii Hospital!">
+         <font>
+            <Font name="System Bold" size="18.0" />
+         </font>
+      </Label>
+      <Pane layoutX="45.0" layoutY="157.0">
          <children>
-            <Button fx:id="goToPatientsLobbyButton" alignment="TOP_LEFT" contentDisplay="TOP" mnemonicParsing="false" text="Patients Lobby">
+            <Label text="Click a tile to view statistics about our hospital">
+               <font>
+                  <Font size="15.0" />
+               </font>
+            </Label>
+            <Button fx:id="showDoctorsStats" contentDisplay="TOP" layoutX="282.0" layoutY="47.0" mnemonicParsing="false" prefHeight="209.0" prefWidth="232.0" text="Doctor Stats">
                <graphic>
-                  <ImageView fitHeight="150.0" fitWidth="200.0" pickOnBounds="true" preserveRatio="true">
-                     <image>
-                        <Image url="@../assets/Patients.jpg" />
-                     </image>
-                  </ImageView>
-               </graphic>
-            </Button>
-            <Button fx:id="goToDoctorsLobbyButton" contentDisplay="TOP" mnemonicParsing="false" text="Doctors Lobby" GridPane.columnIndex="1">
-               <graphic>
-                  <ImageView fitHeight="150.0" fitWidth="200.0" pickOnBounds="true" preserveRatio="true">
+                  <ImageView fitHeight="175.0" fitWidth="196.0" pickOnBounds="true" preserveRatio="true">
                      <image>
                         <Image url="@../assets/Doctors.png" />
                      </image>
                   </ImageView>
                </graphic>
             </Button>
-            <Button fx:id="goToAdministrationLobbyButton" contentDisplay="TOP" mnemonicParsing="false" text="Administration Lobby" GridPane.columnIndex="2">
+            <Button fx:id="showFacilitiesStats" contentDisplay="TOP" layoutX="574.0" layoutY="44.0" mnemonicParsing="false" prefHeight="216.0" prefWidth="232.0" text="Facilities Stats">
                <graphic>
-                  <ImageView fitHeight="150.0" fitWidth="200.0" pickOnBounds="true" preserveRatio="true">
+                  <ImageView fitHeight="209.0" fitWidth="220.0" pickOnBounds="true" preserveRatio="true">
                      <image>
                         <Image url="@../assets/HospitalFacilities.jpg" />
                      </image>
                   </ImageView>
                </graphic>
             </Button>
+            <Button fx:id="showPatientsStats" alignment="TOP_LEFT" contentDisplay="TOP" layoutY="47.0" mnemonicParsing="false" prefHeight="208.0" prefWidth="226.0" text="Patient Stats">
+               <graphic>
+                  <ImageView fitHeight="182.0" fitWidth="216.0" pickOnBounds="true" preserveRatio="true">
+                     <image>
+                        <Image url="@../assets/Patients.jpg" />
+                     </image>
+                  </ImageView>
+               </graphic>
+            </Button>
          </children>
-      </GridPane>
-      <Label alignment="CENTER" contentDisplay="CENTER" layoutX="82.0" layoutY="24.0" prefHeight="20.0" prefWidth="640.0" text="Welcome to the Unirii Hospital!">
-         <font>
-            <Font name="System Bold" size="18.0" />
-         </font>
-      </Label>
-      <Label layoutX="130.0" layoutY="138.0" text="Please select one of the lobbies below:">
-         <font>
-            <Font size="15.0" />
-         </font>
-      </Label>
+      </Pane>
    </children>
 </AnchorPane>

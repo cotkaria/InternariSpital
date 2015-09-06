@@ -8,12 +8,12 @@ import com.database.internarispital.entities.patients.HospitalizedPatient;
 import com.database.internarispital.entities.patients.Patient;
 import com.database.internarispital.views.ViewManager;
 
-public class PatientsViewModel implements IPatientsViewModel
+public class HospitalizationViewModel implements IHospitalizationViewModel
 {
 	private HospitalizationViewController mPatientsViewController;
 	private DataBase mDataBase;
 	
-	public PatientsViewModel(HospitalizationViewController patientsViewController, DataBase dataBase)
+	public HospitalizationViewModel(HospitalizationViewController patientsViewController, DataBase dataBase)
 	{
 		mPatientsViewController = patientsViewController;
 		mDataBase = dataBase;

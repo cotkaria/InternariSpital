@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.text.*?>
+<?import javafx.scene.shape.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.chart.*?>
+<?import java.lang.*?>
+<?import javafx.scene.layout.*?>
+
+<Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="497.0" prefWidth="900.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.database.internarispital.views.patients.stats.PatientsStatsViewController">
+   <children>
+      <LineChart fx:id="occupancyRateChart" layoutX="364.0" layoutY="50.0">
+        <xAxis>
+          <CategoryAxis label="Seasons" side="BOTTOM" />
+        </xAxis>
+        <yAxis>
+          <NumberAxis label="Patients count" side="LEFT" />
+        </yAxis>
+      </LineChart>
+      <Label layoutX="14.0" layoutY="102.0" text="Here are some interesting facts about our hospital">
+         <font>
+            <Font name="System Bold" size="14.0" />
+         </font>
+      </Label>
+      <Label layoutX="524.0" layoutY="40.0" text="Hospital occupancy over time">
+         <font>
+            <Font name="System Bold" size="14.0" />
+         </font>
+      </Label>
+      <VBox layoutX="14.0" layoutY="137.0" prefHeight="196.0" prefWidth="344.0" spacing="10.0">
+         <children>
+            <Label fx:id="patientsTreatedLabel" text="Patients treated: 15">
+               <font>
+                  <Font size="14.0" />
+               </font>
+            </Label>
+            <Label fx:id="patientsStillAdmittedLabel" text="Patients currently admitted: 5">
+               <font>
+                  <Font size="14.0" />
+               </font>
+            </Label>
+            <Label fx:id="patientsWithMultipleStaysLabel" text="Patients that have had more than one stay: 4">
+               <font>
+                  <Font size="14.0" />
+               </font>
+            </Label>
+            <Label fx:id="currentOccupancyRateLabel" text="Current occupancy: 80 %">
+               <font>
+                  <Font size="14.0" />
+               </font>
+            </Label>
+            <ProgressBar fx:id="currentOccupancyRateBar" prefWidth="200.0" progress="0.0" />
+            <Label fx:id="averageOccupancyRateLabel" text="Average occupancy: 60%">
+               <font>
+                  <Font size="14.0" />
+               </font>
+            </Label>
+            <ProgressBar fx:id="averageOccupancyRateBar" prefWidth="200.0" progress="0.0" />
+         </children>
+      </VBox>
+      <Separator layoutX="14.0" layoutY="121.0" prefWidth="330.0" />
+      <Separator layoutX="509.0" layoutY="60.0" prefHeight="1.0" prefWidth="225.0" />
+   </children>
+</Pane>

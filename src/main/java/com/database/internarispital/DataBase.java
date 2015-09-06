@@ -6,7 +6,9 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.time.LocalDateTime;
+import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeParseException;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -479,7 +481,7 @@ public class DataBase
 	
 	public HospitalizedPatient hospitalizePatient(Patient patient, int bedId)
 	{
-		createHospitalizationRecord(patient);
+		createHospitalizationRecord(patient, bedId);
 		HospitalizedPatient hospitalizedPatient = null;
 		String sqlHospitalize = "INSERT INTO Hospitalizations VALUES ("
 							+ patient.getPatientId() + "," + bedId + ")";
@@ -492,10 +494,11 @@ public class DataBase
 		return hospitalizedPatient;
 	}
 	
-	private void createHospitalizationRecord(Patient patient)
+	private void createHospitalizationRecord(Patient patient, int bedId)
 	{
 		String sqlAdmit = "INSERT INTO Hospitalization_Records VALUES("
-						+ patient.getPatientId() + ", '" + getCurrentDate() + "', NULL)";
+						+ patient.getPatientId() + ", '" + getCurrentDate() + "', NULL, "
+						+ bedId + ")";
 		executeUpdate(sqlAdmit);
 	}
 	private String getCurrentDate()
@@ -587,6 +590,25 @@ public class DataBase
 			e.printStackTrace();
 		}
 		return bedsList;
+	}
+	
+	private ObservableList<Integer> getAllBedIds()
+	{
+		ObservableList<Integer> bedIds = FXCollections.observableArrayList();
+		try
+		{
+			String sqlQuery = "SELECT bed_Id FROM Beds";
+			ResultSet resultSet = mStatement.executeQuery(sqlQuery);
+			while(resultSet.next())
+			{
+				bedIds.add(resultSet.getInt("bed_Id"));
+			}
+		}
+		catch(SQLException e)
+		{
+			e.printStackTrace();
+		}
+		return bedIds;
 	}
 	
 	public ObservableList<Ward> getWards(int sectionId)
@@ -1014,5 +1036,168 @@ public class DataBase
 			throw new SQLException("No rows modified in insert.");
 		}
 		return keyId;
+	}
+	
+	public int getPatientsTreatedCount()
+	{
+		String sqlQuery = "SELECT DISTINCT patient_Id FROM Consultations C";
+    	int	count = selectAndGetFirstValue(sqlQuery);
+		return count;
+	}
+	public int getPatientsCurrentlyAddmited()
+	{
+		String sqlQuery = "SELECT COUNT(*) FROM Hospitalizations";
+    	int	count = selectAndGetFirstValue(sqlQuery);
+		return count;
+	}
+	public int getRecurringPatientsCount()
+	{
+		String sqlQuery = "SELECT COUNT(DISTINCT patient_Id) FROM Hospitalization_Records "
+				+ "WHERE patient_Id IN (SELECT patient_Id FROM Hospitalization_Records "
+				+ "GROUP BY patient_Id HAVING COUNT(*) > 1)";
+    	int	count = selectAndGetFirstValue(sqlQuery);
+		return count;
+	}
+	public float getCurrentOccupancyRate()
+	{
+		int occupiedBeds = getOccupiedBedsCount();
+		int totalBeds = getTotalBedsCount();
+		float rate = 0.0f;
+		if(totalBeds != 0)
+		{
+			rate = (float)occupiedBeds / totalBeds;
+		}
+		return rate;
+	}
+	public double getAverageOccupancyRate(LocalDateTime startDate, LocalDateTime endDate)
+	{
+		double occupiedTime = 0.0f;  
+		
+		ObservableList<Integer> bedIds = getAllBedIds();
+		for(Integer bedId: bedIds)
+		{
+			occupiedTime += getTotalOccupiedTimeForBed(bedId, startDate, endDate);
+		}
+		
+		double rate = 0.0f;
+		double totalTime = getTimeInPeriodInMs(startDate, endDate);
+		totalTime *= bedIds.size();
+		if(totalTime != 0.0f)
+		{
+			rate = occupiedTime / totalTime;
+		}
+		return rate;
+	}
+	
+	private double getTotalOccupiedTimeForBed(int bedId, LocalDateTime startDate, LocalDateTime endDate)
+	{
+		double totalTimeInMs = 0.0f;
+		
+		String query = "SELECT * FROM Hospitalization_Records "
+				+ "WHERE bed_ID = " + bedId + " AND "
+				+ "admittance_date BETWEEN '" + formatDate(startDate) + "' AND '" + formatDate(endDate) + "'";
+		try
+		{
+			ResultSet resultSet = mStatement.executeQuery(query);
+			while(resultSet.next())
+			{
+				Date admittanceDateTmp = resultSet.getTimestamp("admittance_date");
+				Date dischargeDateTmp = resultSet.getTimestamp("discharge_date");
+				
+				LocalDateTime admittanceDate = getLocalDate(admittanceDateTmp);
+				LocalDateTime dischargeDate = null;
+				if(dischargeDateTmp == null)
+				{
+					dischargeDate = endDate;
+				}
+				else
+				{
+					dischargeDate = getLocalDate(dischargeDateTmp);
+					if(dischargeDate.compareTo(endDate) > 0)
+					{
+						dischargeDate = endDate;
+					}
+				}
+				totalTimeInMs += getTimeInPeriodInMs(admittanceDate, dischargeDate);
+			}
+		}
+		catch(DateTimeParseException ex)
+		{
+			ex.printStackTrace();
+		}
+		catch(SQLException e)
+		{
+			e.printStackTrace();
+		}
+		
+		return totalTimeInMs;
+	}
+	
+	private long getTimeInPeriodInMs(LocalDateTime startDate, LocalDateTime endDate)
+	{
+		long startDateInMs = startDate.atZone(ZoneId.systemDefault()).toInstant().toEpochMilli();
+		long endDateInMs = endDate.atZone(ZoneId.systemDefault()).toInstant().toEpochMilli();
+		
+		long period = 0;
+		if(endDateInMs >= startDateInMs)
+		{
+			period = (endDateInMs - startDateInMs);
+		}
+		return period;
+	}
+
+	private int getOccupiedBedsCount()
+	{
+		String sqlQuery = "SELECT COUNT(*) FROM Beds WHERE OCCUPANCY = 1";
+    	int	count = selectAndGetFirstValue(sqlQuery);
+		return count;
+	}
+	private int getTotalBedsCount()
+	{
+		String sqlQuery = "SELECT COUNT(*) FROM Beds";
+    	int	count = selectAndGetFirstValue(sqlQuery);
+		return count;
+	}
+	
+	public int getHospitalizedPatientsInPeriod(LocalDateTime start, LocalDateTime end)
+	{
+		String query1 = "SELECT COUNT(*) FROM Hospitalization_Records "
+				+ "WHERE (discharge_date IS NOT NULL)"
+				+ "AND (discharge_date BETWEEN '" + formatDate(start) + "' AND '" + formatDate(end) + "')";
+		int patientsDischargedCount = selectAndGetFirstValue(query1);
+		
+		String query2 = "SELECT COUNT(*) FROM Hospitalization_Records "
+				+ "WHERE (discharge_date IS NULL)"
+				+ "AND (admittance_date BETWEEN '" + formatDate(start) + "' AND '" + formatDate(end) + "')";
+		int patientsNotDischargedCount = selectAndGetFirstValue(query2);
+		
+		return (patientsDischargedCount + patientsNotDischargedCount);
+	}
+	
+	private int selectAndGetFirstValue(String query)
+	{
+		int value = 0;
+        try
+        {
+        	ResultSet resultSet = mStatement.executeQuery(query);
+        	if(resultSet.next())
+        	{
+        		value = resultSet.getInt(1);
+        	}
+        }
+        catch(Exception e)
+        {
+        	e.printStackTrace();        	
+        }
+		return value;
+	}
+	
+	private LocalDateTime getLocalDate(Date date)
+	{
+		return date.toInstant().atZone(ZoneId.systemDefault()).toLocalDateTime();
+	}
+	private String formatDate(LocalDateTime ldt)
+	{
+		return ldt.format(DateTimeFormatter.ISO_LOCAL_DATE);
 	}
 }

@@ -6,12 +6,12 @@ import com.database.internarispital.entities.Diagnostic;
 import com.database.internarispital.entities.doctors.Doctor;
 import com.database.internarispital.entities.patients.HospitalizedPatient;
 
-public class DoctorsViewModel implements IDoctorsViewModel
+public class DiagnosticationViewModel implements IDiagnosticationViewModel
 {
 	private DiagnosticationViewController mDoctorsViewController;
 	private DataBase mDataBase;
 	
-	public DoctorsViewModel(DiagnosticationViewController doctorsViewController, DataBase dataBase)
+	public DiagnosticationViewModel(DiagnosticationViewController doctorsViewController, DataBase dataBase)
 	{
 		mDoctorsViewController = doctorsViewController;
 		mDataBase = dataBase;

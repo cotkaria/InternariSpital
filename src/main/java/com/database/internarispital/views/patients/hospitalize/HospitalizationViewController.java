@@ -67,7 +67,7 @@ public class HospitalizationViewController implements Initializable
     @FXML
     private ComboBox<Patient> notHospitalizedPatientsCB;
      
-    private IPatientsViewModel mPatientsViewModel;
+    private IHospitalizationViewModel mPatientsViewModel;
   
     @Override
 	public void initialize(URL location, ResourceBundle resources) 
@@ -94,7 +94,7 @@ public class HospitalizationViewController implements Initializable
 		bedNumberColumn.setCellValueFactory(new PropertyValueFactory<HospitalizedPatient, Integer>("bedNumber"));
 	}
     
-    public void setViewModel(IPatientsViewModel patientsViewModel)
+    public void setViewModel(IHospitalizationViewModel patientsViewModel)
     {
     	mPatientsViewModel = patientsViewModel;
     	assert(mPatientsViewModel != null);
@@ -225,10 +225,18 @@ public class HospitalizationViewController implements Initializable
 	public void setSections(ObservableList<Section> sections)
 	{
 		PatientsHelper.setAndSelectFirst(sectionsList, sections);
+		if(sections.isEmpty() == false)
+		{
+			mPatientsViewModel.selectSection(sections.get(0));
+		}
 	}
 	public void setWards(ObservableList<Ward> wards)
 	{
 		PatientsHelper.setAndSelectFirst(wardsList, wards);
+		if(wards.isEmpty() == false)
+		{
+			mPatientsViewModel.selectWard(wards.get(0));
+		}
 	}
 	public void setBeds(ObservableList<Bed> beds)
 	{

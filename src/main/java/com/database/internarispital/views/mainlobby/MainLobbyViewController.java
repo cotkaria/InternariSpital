@@ -12,22 +12,22 @@ import javafx.scene.control.Button;
 public class MainLobbyViewController implements Initializable
 {
 	@FXML
-    private Button goToPatientsLobbyButton;
+    private Button showPatientsStats;
 
     @FXML
-    private Button goToDoctorsLobbyButton;
+    private Button showDoctorsStats;
 
     @FXML
-    private Button goToAdministrationLobbyButton;
+    private Button showFacilitiesStats;
 	
 	private IMainLobbyViewModel mViewModel;
 	
 	@Override
 	public void initialize(URL location, ResourceBundle resources)
 	{
-		goToPatientsLobbyButton.setOnAction(event -> ViewManager.showHospitalizePatientsView());
-		goToDoctorsLobbyButton.setOnAction(event -> ViewManager.showDiagnosticsView());
-		goToAdministrationLobbyButton.setOnAction(event -> ViewManager.showEditDoctorsView());
+		showPatientsStats.setOnAction(event -> ViewManager.showPatientsStats());
+		showDoctorsStats.setOnAction(event -> ViewManager.showDoctorsStats());
+		showFacilitiesStats.setOnAction(event -> ViewManager.showFacilitiesStats());
 	}
 	
 	public void setViewModel(IMainLobbyViewModel viewModel)

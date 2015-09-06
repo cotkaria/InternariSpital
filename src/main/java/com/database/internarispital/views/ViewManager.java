@@ -14,7 +14,7 @@ import com.database.internarispital.views.doctors.browse.BrowseDoctorsViewModel;
 import com.database.internarispital.views.doctors.create.CreateDoctorViewController;
 import com.database.internarispital.views.doctors.create.CreateDoctorViewModel;
 import com.database.internarispital.views.doctors.diagnosticate.DiagnosticationViewController;
-import com.database.internarispital.views.doctors.diagnosticate.DoctorsViewModel;
+import com.database.internarispital.views.doctors.diagnosticate.DiagnosticationViewModel;
 import com.database.internarispital.views.doctors.edit.EditDoctorsViewController;
 import com.database.internarispital.views.doctors.edit.EditDoctorsViewModel;
 import com.database.internarispital.views.doctors.history.DoctorHistoryViewController;
@@ -32,9 +32,11 @@ import com.database.internarispital.views.patients.browse.BrowsePatientsViewMode
 import com.database.internarispital.views.patients.create.CreatePatientViewController;
 import com.database.internarispital.views.patients.create.CreatePatientViewModel;
 import com.database.internarispital.views.patients.hospitalize.HospitalizationViewController;
-import com.database.internarispital.views.patients.hospitalize.PatientsViewModel;
+import com.database.internarispital.views.patients.hospitalize.HospitalizationViewModel;
 import com.database.internarispital.views.patients.records.RecordsViewController;
 import com.database.internarispital.views.patients.records.RecordsViewModel;
+import com.database.internarispital.views.patients.stats.PatientsStatsViewController;
+import com.database.internarispital.views.patients.stats.PatientsStatsViewModel;
 
 import javafx.collections.ObservableList;
 import javafx.fxml.FXMLLoader;
@@ -73,6 +75,11 @@ public class ViewManager
 	
 	private static final String LOGIN_PATH 						= LAYOUTS_PATH + "login/";
 	private static final String LOGIN_VIEW_PATH 				= LOGIN_PATH + "LoginView.fxml";
+	
+	private static final String STATS_PATH 						= LAYOUTS_PATH + "stats/";
+	private static final String PATIENTS_STATS_VIEW_PATH 		= STATS_PATH + "PatientsStatsView.fxml";
+	private static final String DOCTORS_STATS_VIEW_PATH 		= STATS_PATH + "DoctorsStatsView.fxml";
+	private static final String FACILITIES_STATS_VIEW_PATH 		= STATS_PATH + "FacilitiesStatsView.fxml";
 	
 	private static Stage mStage;
 	private static Scene mScene;
@@ -128,7 +135,7 @@ public class ViewManager
 	{
 		setTitle("Hospitalize Patients View");
 		HospitalizationViewController patientsViewController = (HospitalizationViewController)loadView(HOSPITALIZE_PATIENTS_VIEW_PATH);
-		new PatientsViewModel(patientsViewController, mDataBase);
+		new HospitalizationViewModel(patientsViewController, mDataBase);
 	}
 	
 	public static void showBrowsePatientsView()
@@ -149,7 +156,7 @@ public class ViewManager
 	{		
 		setTitle("Diagnostics View");
 		DiagnosticationViewController doctorsViewController = (DiagnosticationViewController)loadView(DIAGNOSTICS_VIEW_PATH);
-		new DoctorsViewModel(doctorsViewController, mDataBase);
+		new DiagnosticationViewModel(doctorsViewController, mDataBase);
 	}
 	
 	public static void showEditPatientsView()
@@ -226,6 +233,25 @@ public class ViewManager
 		stage.setResizable(false);
 		CreatePatientViewController viewController = (CreatePatientViewController)loadScene(CREATE_PATIENT_VIEW_PATH, stage);
 		new CreatePatientViewModel(viewController, mDataBase, stage, onPatientCreatedCB);
+	}
+	
+	public static void showPatientsStats()
+	{
+		final Stage stage = new Stage();
+		stage.setTitle("Patient Stats");
+		stage.setResizable(false);
+		PatientsStatsViewController viewController = (PatientsStatsViewController)loadScene(PATIENTS_STATS_VIEW_PATH, stage);
+		new PatientsStatsViewModel(viewController, mDataBase);
+	}
+	
+	public static void showDoctorsStats()
+	{
+	
+	}
+	
+	public static void showFacilitiesStats()
+	{
+	
 	}
 	
 	private static Object loadScene(String scenePath, Stage stage)

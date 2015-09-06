@@ -9,15 +9,15 @@
 <AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="900.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.database.internarispital.views.facilities.EditFacilitiesViewController">
    <children>
       <ComboBox fx:id="sectionsCB" layoutX="146.0" layoutY="99.0" prefHeight="25.0" prefWidth="265.0" promptText="Sections" />
-      <TextField fx:id="sectionNameTF" layoutX="146.0" layoutY="151.0" prefHeight="25.0" prefWidth="265.0" text="Section name" />
+      <TextField fx:id="sectionNameTF" layoutX="146.0" layoutY="151.0" prefHeight="25.0" prefWidth="265.0" />
       <Button fx:id="addSectionButton" layoutX="446.0" layoutY="151.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="100.0" text="Add section" />
       <Button fx:id="removeSectionButton" layoutX="446.0" layoutY="99.0" mnemonicParsing="false" text="Remove section" />
       <ComboBox fx:id="wardsCB" layoutX="146.0" layoutY="231.0" prefHeight="25.0" prefWidth="265.0" promptText="Wards" />
-      <TextField fx:id="wardNumberTF" layoutX="146.0" layoutY="281.0" prefHeight="25.0" prefWidth="265.0" text="Ward name" />
+      <TextField fx:id="wardNumberTF" layoutX="146.0" layoutY="281.0" prefHeight="25.0" prefWidth="265.0" />
       <Button fx:id="addWardButton" layoutX="446.0" layoutY="281.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="100.0" text="Add ward" />
       <Button fx:id="removeWardButton" layoutX="444.0" layoutY="231.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="100.0" text="Remove ward" />
       <ComboBox fx:id="bedsCB" layoutX="146.0" layoutY="367.0" prefHeight="25.0" prefWidth="265.0" promptText="Beds" />
-      <TextField fx:id="bedNumberTF" layoutX="146.0" layoutY="408.0" prefHeight="25.0" prefWidth="265.0" text="Bed name" />
+      <TextField fx:id="bedNumberTF" layoutX="146.0" layoutY="408.0" prefHeight="25.0" prefWidth="265.0" />
       <Button fx:id="addBedButton" layoutX="446.0" layoutY="408.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="100.0" text="Add bed" />
       <Button fx:id="removeBedButton" layoutX="444.0" layoutY="367.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="100.0" text="Remove bed" />
       <Label layoutX="146.0" layoutY="71.0" text="Edit Sections" />

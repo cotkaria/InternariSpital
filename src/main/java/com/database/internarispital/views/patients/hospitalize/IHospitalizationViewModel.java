@@ -6,7 +6,7 @@ import com.database.internarispital.entities.facilities.Ward;
 import com.database.internarispital.entities.patients.HospitalizedPatient;
 import com.database.internarispital.entities.patients.Patient;
 
-public interface IPatientsViewModel 
+public interface IHospitalizationViewModel 
 {
 	void createPatient();
 	void hospitalizePatient(Patient patient, Bed bed);

@@ -70,7 +70,7 @@ public class DiagnosticationViewController implements Initializable
 	@FXML
 	private TableColumn<Consultation, String> consultationDate;
 	
-	private IDoctorsViewModel mDoctorsViewModel;
+	private IDiagnosticationViewModel mDoctorsViewModel;
 	
 	@Override
 	public void initialize(URL location, ResourceBundle resources)
@@ -94,7 +94,7 @@ public class DiagnosticationViewController implements Initializable
 		});
 
 	}
-	public void setViewModel(IDoctorsViewModel doctorsViewModel)
+	public void setViewModel(IDiagnosticationViewModel doctorsViewModel)
     {
     	mDoctorsViewModel = doctorsViewModel;
     	assert(mDoctorsViewModel != null);

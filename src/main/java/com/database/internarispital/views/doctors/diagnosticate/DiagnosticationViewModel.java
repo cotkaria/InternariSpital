@@ -24,7 +24,7 @@ public class DiagnosticationViewModel implements IDiagnosticationViewModel
 	private void configController()
 	{
 		mDoctorsViewController.setViewModel(this);
-		mDoctorsViewController.setDoctors(mDataBase.getDoctors());
+		mDoctorsViewController.setDoctors(mDataBase.getActiveDoctors());
 		mDoctorsViewController.setConsultations(mDataBase.getConsultations());
 		mDoctorsViewController.setDiagCategories(mDataBase.getDiagCategories());
 	}

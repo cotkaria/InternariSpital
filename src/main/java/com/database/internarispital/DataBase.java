@@ -594,21 +594,37 @@ public class DataBase
 	
 	private ObservableList<Integer> getAllBedIds()
 	{
-		ObservableList<Integer> bedIds = FXCollections.observableArrayList();
+		String sqlQuery = "SELECT bed_Id FROM Beds";
+		ObservableList<Integer> bedIds = getIds(sqlQuery, "bed_Id");
+		return bedIds;
+	}
+	
+	private ObservableList<Integer> getBedIds(Section section)
+	{
+		String sqlQuery = "SELECT bed_Id FROM Beds B "
+				+ "INNER JOIN Wards W on B.ward_Id = W.ward_Id "
+				+ "INNER JOIN Sections S on W.section_Id = S.section_Id "
+				+ "WHERE S.section_Id = " + section.sectionIdProperty().getValue();
+		ObservableList<Integer> bedIds = getIds(sqlQuery, "bed_Id");
+		return bedIds;
+	}
+	
+	private ObservableList<Integer> getIds(String query, String columnName)
+	{
+		ObservableList<Integer> ids = FXCollections.observableArrayList();
 		try
 		{
-			String sqlQuery = "SELECT bed_Id FROM Beds";
-			ResultSet resultSet = mStatement.executeQuery(sqlQuery);
+			ResultSet resultSet = mStatement.executeQuery(query);
 			while(resultSet.next())
 			{
-				bedIds.add(resultSet.getInt("bed_Id"));
+				ids.add(resultSet.getInt(columnName));
 			}
 		}
 		catch(SQLException e)
 		{
 			e.printStackTrace();
 		}
-		return bedIds;
+		return ids;
 	}
 	
 	public ObservableList<Ward> getWards(int sectionId)
@@ -651,7 +667,7 @@ public class DataBase
 		return doctor;
 	}
 	
-	public ObservableList<Doctor> getDoctors()
+	public ObservableList<Doctor> getActiveDoctors()
 	{
 		ObservableList<Doctor> doctorsList = FXCollections.observableArrayList();
 		String sqlQuery = "SELECT * FROM Doctors WHERE active = 1";
@@ -1071,9 +1087,22 @@ public class DataBase
 	}
 	public double getAverageOccupancyRate(LocalDateTime startDate, LocalDateTime endDate)
 	{
+		ObservableList<Integer> bedIds = getAllBedIds();
+		double rate = getAverageOccupancyRateInternal(bedIds, startDate, endDate);
+		return rate;
+	}
+	
+	public double getAverageOccupancyRateForSection(Section section, LocalDateTime startDate, LocalDateTime endDate)
+	{
+		ObservableList<Integer> bedIds = getBedIds(section);
+		double rate = getAverageOccupancyRateInternal(bedIds, startDate, endDate);
+		return rate;
+	}
+	
+	private double getAverageOccupancyRateInternal(ObservableList<Integer> bedIds, LocalDateTime startDate, LocalDateTime endDate)
+	{
 		double occupiedTime = 0.0f;  
 		
-		ObservableList<Integer> bedIds = getAllBedIds();
 		for(Integer bedId: bedIds)
 		{
 			occupiedTime += getTotalOccupiedTimeForBed(bedId, startDate, endDate);
@@ -1172,6 +1201,91 @@ public class DataBase
 		int patientsNotDischargedCount = selectAndGetFirstValue(query2);
 		
 		return (patientsDischargedCount + patientsNotDischargedCount);
+	}
+	
+
+	public int getActiveDoctorsCount()
+	{
+		String query = "SELECT COUNT(*) FROM Doctors WHERE active = 1";
+		int count = selectAndGetFirstValue(query);
+		return count;
+	}
+	
+	public int getConsultationsMadeCount()
+	{
+		String query = "SELECT COUNT(*) FROM Consultations";
+		int count = selectAndGetFirstValue(query);
+		return count;
+	}
+	
+	public Doctor getMostActiveDoctor()
+	{
+		String queryDoctorId = "SELECT TOP 1 doctor_Id, COUNT(*) FROM Consultations GROUP BY doctor_Id ORDER BY COUNT(*) DESC";
+		int doctorId = selectAndGetFirstValue(queryDoctorId);
+		return getDoctor(doctorId);
+	}
+	
+	public Diagnostic getMostCommonDiagnostic()
+	{
+		String queryDiagId = "SELECT TOP 1 diag_Id, COUNT(*) FROM Consultations GROUP BY diag_Id ORDER BY COUNT(*) DESC";
+		int diagId = selectAndGetFirstValue(queryDiagId);
+		return getDiagnostic(diagId);
+	}
+	
+	public Diagnostic getDiagnostic(int diagId)
+	{
+		Diagnostic diag = null;
+		
+		String sqlQuery = "SELECT * FROM Diagnostics D INNER JOIN Diag_Category DC ON D.category_id = DC.category_id "
+				+ "where D.diag_Id = " + diagId;
+		try
+		{
+			ResultSet resultSet = mStatement.executeQuery(sqlQuery);
+			if(resultSet.next())
+			{
+				diag = parseResultSetForDiagnostic(resultSet);
+			}
+		}
+		catch(SQLException e)
+		{
+			e.printStackTrace();
+		}
+		return diag;
+	}
+	
+	public int getConsultationsCount(Doctor doctor)
+	{
+		String query = "SELECT COUNT(*) FROM Consultations WHERE doctor_Id = " + doctor.doctorIdProperty().getValue();
+		int count = selectAndGetFirstValue(query);
+		return count;
+	}
+	
+	public int getSectionsCount()
+	{
+		String query = "SELECT COUNT(*) FROM Sections";
+		int count = selectAndGetFirstValue(query);
+		return count;
+	}
+	
+	public int getWardsCount()
+	{
+		String query = "SELECT COUNT(*) FROM Wards";
+		int count = selectAndGetFirstValue(query);
+		return count;
+	}
+	
+	public int getBedsCount()
+	{
+		String query = "SELECT COUNT(*) FROM Beds";
+		int count = selectAndGetFirstValue(query);
+		return count;
+	}
+	
+	public int getFreeBedsCount()
+	{
+		String query = "SELECT COUNT(*) FROM Beds WHERE occupancy = 0";
+		int count = selectAndGetFirstValue(query);
+		return count;
 	}
 	
 	private int selectAndGetFirstValue(String query)

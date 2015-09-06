@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.chart.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.text.*?>
+<?import java.lang.*?>
+<?import javafx.scene.layout.*?>
+
+
+<Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="900.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.database.internarispital.views.facilities.stats.FacilitiesStatsViewController">
+   <children>
+      <Separator layoutX="24.0" layoutY="189.0" prefHeight="0.0" prefWidth="328.0" />
+      <Label layoutX="24.0" layoutY="169.0" text="Here are some interesting facts about our facilities">
+         <font>
+            <Font name="System Bold" size="14.0" />
+         </font>
+      </Label>
+      <VBox layoutX="24.0" layoutY="200.0" prefHeight="200.0" prefWidth="333.0">
+         <children>
+            <Label fx:id="sectionsCount" prefHeight="20.0" prefWidth="338.0" text="Sections count:">
+               <font>
+                  <Font size="14.0" />
+               </font>
+            </Label>
+            <Label fx:id="wardsCount" prefHeight="20.0" prefWidth="338.0" text="Wards count:">
+               <font>
+                  <Font size="14.0" />
+               </font>
+            </Label>
+            <Label fx:id="bedsCount" prefHeight="20.0" prefWidth="348.0" text="Beds count:">
+               <font>
+                  <Font size="14.0" />
+               </font>
+            </Label>
+            <Label fx:id="freeBedsCount" prefHeight="20.0" prefWidth="362.0" text="Free beds: 2">
+               <font>
+                  <Font size="14.0" />
+               </font>
+            </Label>
+         </children>
+      </VBox>
+      <LineChart fx:id="lineChart" layoutX="371.0" layoutY="79.0" title="Occupancy rates variations on seasons">
+        <xAxis>
+          <CategoryAxis label="Season" side="BOTTOM" />
+        </xAxis>
+        <yAxis>
+          <NumberAxis label="Occupancy rate %" side="LEFT" />
+        </yAxis>
+      </LineChart>
+   </children>
+</Pane>

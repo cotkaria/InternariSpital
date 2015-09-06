@@ -4,6 +4,9 @@ import java.net.URL;
 import java.text.DecimalFormat;
 import java.util.ResourceBundle;
 
+import com.database.internarispital.views.common.CommonHelper;
+import com.database.internarispital.views.common.PeriodOccupancy;
+
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
@@ -66,36 +69,25 @@ public class PatientsStatsViewController implements Initializable
 	}
 	public void setCurrentOccupancyRate(float rate)
 	{
-		currentOccupancyRateLabel.setText("Current occupancy rate: " + convertToPercentage(rate) + "%");
+		currentOccupancyRateLabel.setText("Current occupancy rate: " + CommonHelper.convertToPercentage(rate) + "%");
 		currentOccupancyRateBar.setProgress(rate);
 	}
 	public void setAverageOccupancyRate(double rate)
 	{
-		averageOccupancyRateLabel.setText("Average occupancy rate: " + convertToPercentage(rate)+ "%");
+		averageOccupancyRateLabel.setText("Average occupancy rate: " + CommonHelper.convertToPercentage(rate)+ "%");
 		averageOccupancyRateBar.setProgress(rate);
 	}
 	
-	public void setOccupancyOverTime(ObservableList<PeriodOccupancy> occupancies)
+	public void setOccupancyOverTime(ObservableList<PeriodOccupancy<Integer>> occupancies)
 	{
 		ObservableList<XYChart.Data<String,Integer>> chartValues = FXCollections.observableArrayList();
-		for(PeriodOccupancy occupancy: occupancies)
+		for(PeriodOccupancy<Integer> occupancy: occupancies)
 		{
-			chartValues.add(new XYChart.Data<String,Integer>(occupancy.getPeriodName(), occupancy.getPatientsCount()));
+			chartValues.add(new XYChart.Data<String,Integer>(occupancy.getPeriodName(), occupancy.getOccupancy()));
 		}
 		ObservableList<XYChart.Series<String,Integer>> chartData = FXCollections.observableArrayList();
 		chartData.add(new LineChart.Series<String,Integer>("Patients count", chartValues));
 		
 		occupancyRateChart.setData(chartData);
-	}
-
-	private double convertToPercentage(double value)
-	{
-		return (roundToOneDecimal(value) * 100);
-	}
-	
-	private double roundToOneDecimal(double value)
-	{
-		DecimalFormat twoDForm = new DecimalFormat("#.##");
-		return Double.valueOf(twoDForm.format(value));
 	}
 }

@@ -1,4 +1,4 @@
-package com.database.internarispital.views.facilities;
+package com.database.internarispital.views.facilities.edit;
 
 import java.net.URL;
 import java.util.ResourceBundle;

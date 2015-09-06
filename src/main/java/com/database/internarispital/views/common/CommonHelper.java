@@ -1,5 +1,7 @@
 package com.database.internarispital.views.common;
 
+import java.text.DecimalFormat;
+
 import com.database.internarispital.exceptions.MissingInputException;
 import com.database.internarispital.exceptions.MissingSelectionException;
 
@@ -41,5 +43,16 @@ public class CommonHelper
 			throw new MissingInputException(errorMessage);
 		}
 		return text;
+	}
+	
+	public static double convertToPercentage(double value)
+	{
+		return (roundToOneDecimal(value) * 100);
+	}
+	
+	public static double roundToOneDecimal(double value)
+	{
+		DecimalFormat twoDForm = new DecimalFormat("#.##");
+		return Double.valueOf(twoDForm.format(value));
 	}
 }

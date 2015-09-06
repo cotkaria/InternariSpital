@@ -1,4 +1,4 @@
-package com.database.internarispital.views.facilities;
+package com.database.internarispital.views.facilities.edit;
 
 import com.database.internarispital.entities.facilities.Bed;
 import com.database.internarispital.entities.facilities.Section;

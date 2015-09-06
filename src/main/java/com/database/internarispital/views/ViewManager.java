@@ -19,8 +19,12 @@ import com.database.internarispital.views.doctors.edit.EditDoctorsViewController
 import com.database.internarispital.views.doctors.edit.EditDoctorsViewModel;
 import com.database.internarispital.views.doctors.history.DoctorHistoryViewController;
 import com.database.internarispital.views.doctors.history.DoctorHistoryViewModel;
-import com.database.internarispital.views.facilities.EditFacilitiesViewController;
-import com.database.internarispital.views.facilities.EditFacilitiesViewModel;
+import com.database.internarispital.views.doctors.stats.DoctorsStatsViewController;
+import com.database.internarispital.views.doctors.stats.DoctorsStatsViewModel;
+import com.database.internarispital.views.facilities.edit.EditFacilitiesViewController;
+import com.database.internarispital.views.facilities.edit.EditFacilitiesViewModel;
+import com.database.internarispital.views.facilities.stats.FacilitiesStatsViewController;
+import com.database.internarispital.views.facilities.stats.FacilitiesStatsViewModel;
 import com.database.internarispital.views.login.LoginViewController;
 import com.database.internarispital.views.login.LoginViewModel;
 import com.database.internarispital.views.mainlobby.MainLobbyViewController;
@@ -246,12 +250,20 @@ public class ViewManager
 	
 	public static void showDoctorsStats()
 	{
-	
+		final Stage stage = new Stage();
+		stage.setTitle("Doctors Stats");
+		stage.setResizable(false);
+		DoctorsStatsViewController viewController = (DoctorsStatsViewController)loadScene(DOCTORS_STATS_VIEW_PATH, stage);
+		new DoctorsStatsViewModel(viewController, mDataBase);
 	}
 	
 	public static void showFacilitiesStats()
 	{
-	
+		final Stage stage = new Stage();
+		stage.setTitle("Facilities Stats");
+		stage.setResizable(false);
+		FacilitiesStatsViewController viewController = (FacilitiesStatsViewController)loadScene(FACILITIES_STATS_VIEW_PATH, stage);
+		new FacilitiesStatsViewModel(viewController, mDataBase);
 	}
 	
 	private static Object loadScene(String scenePath, Stage stage)

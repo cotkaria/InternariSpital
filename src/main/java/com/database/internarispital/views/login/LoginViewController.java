@@ -7,10 +7,13 @@ import com.database.internarispital.exceptions.MissingInputException;
 import com.database.internarispital.util.DialogHelper;
 import com.database.internarispital.views.common.CommonHelper;
 
+import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
+import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyEvent;
 
 public class LoginViewController implements Initializable
 {
@@ -34,6 +37,16 @@ public class LoginViewController implements Initializable
 	public void initialize(URL location, ResourceBundle resources)
 	{
 		loginButon.setOnAction(event -> onLogin());
+		EventHandler<? super KeyEvent> doLogin = (event -> 
+		{
+			if(event.getCode() == KeyCode.ENTER)
+			{
+				onLogin();
+			}
+		}); 
+		loginButon.setOnKeyPressed(doLogin);
+		userNameTF.setOnKeyPressed(doLogin);
+		passwordTF.setOnKeyPressed(doLogin);
 	}
 	
 	private void onLogin()

@@ -17,6 +17,6 @@ public class BrowseDoctorsViewModel
 	
 	private void configureViewController()
 	{
-		mViewController.setDoctors(mDataBase.getDoctors());
+		mViewController.setDoctors(mDataBase.getActiveDoctors());
 	}
 }

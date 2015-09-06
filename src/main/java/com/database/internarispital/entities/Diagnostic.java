@@ -5,7 +5,8 @@ import javafx.beans.property.SimpleIntegerProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 
-public class Diagnostic {
+public class Diagnostic 
+{
 	
 	private IntegerProperty mDiagId;
 	private StringProperty mDiagName;
@@ -16,13 +17,13 @@ public class Diagnostic {
 	{
 		this(-1, "", "", "");
 	}
+	
 	public Diagnostic(int diagId, String diagName, String diagCategoryNameProperty, String diagDescription)
 	{
 		mDiagId = new SimpleIntegerProperty(diagId);
-		mDiagName =new SimpleStringProperty(diagName);
+		mDiagName = new SimpleStringProperty(diagName);
 		mDiagCategoryName = new SimpleStringProperty(diagCategoryNameProperty);		
 		mDiagDscription = new SimpleStringProperty(diagDescription);
-		
 	}
 	
 	public IntegerProperty diagIdProperty()

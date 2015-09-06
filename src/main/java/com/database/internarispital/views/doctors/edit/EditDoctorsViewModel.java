@@ -23,7 +23,7 @@ public class EditDoctorsViewModel implements IEditDoctorsViewModel
 	private void configController()
 	{
 		mViewController.setViewModel(this);
-		mViewController.setDoctors(mDataBase.getDoctors());		
+		mViewController.setDoctors(mDataBase.getActiveDoctors());		
 	}
 	
 	@Override
